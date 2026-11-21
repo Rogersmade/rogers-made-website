@@ -338,6 +338,17 @@ nav a[aria-current="page"] {
   padding: 7px 11px;
 }
 
+/* SOLD label — set sold: true in products.js */
+.product-badge.sold {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #11110f;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+.product.is-sold .product-image img { opacity: .72; filter: saturate(.75); }
+.product.is-sold:hover .product-image img { opacity: .85; }
+
 .product-info {
   padding: 25px;
   display: flex;
@@ -1100,6 +1111,8 @@ nav a[aria-current="page"] {
   align-items: start;
 }
 
+.gallery { position: relative; }
+.detail-sold { top: 18px; left: 18px; font-size: 11px; padding: 8px 14px; }
 .gallery-main {
   aspect-ratio: 4 / 3.6;
   background: #1b1a17;
