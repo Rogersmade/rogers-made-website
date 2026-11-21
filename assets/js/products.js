@@ -75,10 +75,11 @@ window.ROGERS_CATEGORIES = [
 
 /* ---------------------------------------------------------
    YOUR PRODUCTS
-   The entries below are starter slots, ready for your real
-   pieces. Replace the name, text and photos with your own.
-   (The photos currently used are temporary stock images
-   from assets/images/placeholders/.)
+   The Oak House Number Plaque uses real photos. The other
+   entries are starter slots, ready for your real pieces.
+   Replace the name, text and photos with your own.
+   (Starter slots use temporary stock images from
+   assets/images/placeholders/.)
    --------------------------------------------------------- */
 
 window.ROGERS_PRODUCTS = [
@@ -140,21 +141,30 @@ window.ROGERS_PRODUCTS = [
     sold: false
   },
   {
-    id: "sign-01",
-    name: "Personalised Sign No. 1",
+    id: "oak-house-number-plaque",
+    name: "Handmade Oak House Number Plaque",
     category: "signs",
     price: null,
     priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire with the wording you'd like.",
+    summary: "Handmade in oak, shown here with the number 10, a script street name and decorative scrollwork.",
     description: [
-      "Full details for this piece are being added.",
-      "Tell me the wording you'd like when you enquire, and I'll confirm the design, size and price with you before anything is made."
+      "A handmade oak house number plaque, shown here displaying the number 10 in a bold serif numeral, with a flowing script street name beneath and decorative scrollwork either side.",
+      "Made by hand from oak, so the grain on every plaque is its own.",
+      "Send an enquiry to ask about this piece, or tell me the number and wording you'd like, and I'll confirm the design, size and price with you before anything is made."
     ],
-    images: ["/assets/images/placeholders/sign-engraved.jpg"],
+    images: [
+      "/assets/images/products/oak-house-number-plaque-1.jpg",
+      "/assets/images/products/oak-house-number-plaque-2.jpg",
+      "/assets/images/products/oak-house-number-plaque-3.jpg",
+      "/assets/images/products/oak-house-number-plaque-4.jpg",
+      "/assets/images/products/oak-house-number-plaque-5.jpg"
+    ],
     details: [
+      ["Timber", "Oak"],
+      ["Shown", "House number 10"],
       ["Made", "By hand in my UK workshop"]
     ],
-    badge: "Personalised",
+    badge: "Handmade",
     featured: true,
     sold: false
   },

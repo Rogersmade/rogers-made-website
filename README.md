@@ -42,7 +42,7 @@ All products are in **`assets/js/products.js`**. The home page, shop, category c
 - **Set a price:** change `price: null` to a number, e.g. `price: 85`.
 - **Mark as sold:** change `sold: false` to `sold: true`. The product stays on the site with a gold SOLD label, and its button becomes "Ask about a similar piece".
 
-The site currently has eight **starter slots** (e.g. "Handmade Lamp No. 1"). They have no invented details and use temporary stock photos. Replace each one with a real piece, or delete the ones you don't need.
+The first real piece, the **Handmade Oak House Number Plaque** (`/product?id=oak-house-number-plaque`), has a five-photo gallery. The site also has seven **starter slots** (e.g. "Handmade Lamp No. 1"). They have no invented details and use temporary stock photos. Replace each one with a real piece, or delete the ones you don't need.
 
 Category names, descriptions and images are at the top of the same file (`ROGERS_CATEGORIES`).
 
@@ -50,7 +50,7 @@ Category names, descriptions and images are at the top of the same file (`ROGERS
 
 - Put photos in `assets/images/products/`.
 - Use simple lowercase file names with dashes and no spaces, e.g. `oak-table-lamp-1.jpg`.
-- List them in the product's `images`, starting with `/assets/images/products/`. The first photo is the main one; extra photos appear as thumbnails on the product page.
+- List them in the product's `images`, starting with `/assets/images/products/`. The first photo is the main one on the card. Extra photos appear as thumbnails on the product page, where customers can step through them with the arrows (or swipe on mobile) and tap the main photo to view it full screen.
 - Phone photos are fine. They're resized automatically. Landscape or square photos look best on the cards.
 
 ## Contact details & social links
