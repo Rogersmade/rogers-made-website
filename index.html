@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rogers Made | Handmade in Wood</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #11110f;
+  color: #f5f1e9;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 25px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.logo {
+  font-size: 28px;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #b88a54;
+}
+
+nav a {
+  color: #eee;
+  text-decoration: none;
+  margin-left: 28px;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #c49a6c;
+}
+
+.hero {
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  padding: 80px 10%;
+  background:
+    radial-gradient(ellipse at 75% 45%, #4a3421 0%, transparent 45%),
+    linear-gradient(120deg, #171613, #252019, #11110f);
+}
+
+.hero-content {
+  max-width: 650px;
+}
+
+.eyebrow {
+  color: #c49a6c;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-size: clamp(45px, 7vw, 82px);
+  line-height: 1.05;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.hero h1 span {
+  color: #c49a6c;
+}
+
+.hero p {
+  color: #c5c0b8;
+  font-size: 18px;
+  line-height: 1.8;
+  max-width: 520px;
+  margin-bottom: 35px;
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 30px;
+  background: #b88a54;
+  color: #111;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background: #d0aa7d;
+}
+
+.section {
+  padding: 90px 10%;
+}
+
+.section-title {
+  font-size: 38px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.section-intro {
+  color: #aaa39a;
+  margin-bottom: 45px;
+  line-height: 1.7;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.product {
+  background: #1b1a17;
+  border: 1px solid #33302a;
+  transition: 0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  border-color: #80603e;
+}
+
+.product-image {
+  height: 280px;
+  background:
+    linear-gradient(145deg, #463626, #211a13 70%, #141311);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #82715a;
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+
+.product-info {
+  padding: 25px;
+}
+
+.product-info h3 {
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #aaa39a;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.story {
+  background: #1a1916;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.story-image {
+  min-height: 400px;
+  background:
+    linear-gradient(135deg, #59432b, #30251b, #161411);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #96816a;
+  letter-spacing: 3px;
+}
+
+.story-text p {
+  color: #b9b3aa;
+  line-height: 1.9;
+  margin: 25px 0;
+}
+
+footer {
+  padding: 35px 10%;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  color: #89847c;
+  font-size: 13px;
+}
+
+footer strong {
+  color: #c49a6c;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 800px) {
+  header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  nav a {
+    margin: 0 10px;
+  }
+
+  .hero {
+    min-height: 65vh;
+    padding: 70px 7%;
+  }
+
+  .section {
+    padding: 65px 7%;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+  }
+
+  .story {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .story-image {
+    min-height: 280px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ROGERS <span>MADE</span></div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#shop">Shop</a>
+    <a href="#story">Our Story</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="eyebrow">Handmade • Designed • Made by hand</div>
+
+    <h1>Made from wood.<br><span>Made with purpose.</span></h1>
+
+    <p>
+      Unique handmade pieces, crafted in my workshop using beautiful
+      timber, thoughtful design and a passion for making things
+      that are built to be treasured.
+    </p>
+
+    <a href="#shop" class="button">Explore the collection</a>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="eyebrow">The collection</div>
+  <h2 class="section-title">Made by hand. Never mass produced.</h2>
+  <p class="section-intro">
+    Small-batch creations, each with its own character.
+  </p>
+
+  <div class="products">
+
+    <div class="product">
+      <div class="product-image">LAMPS & LIGHTING</div>
+      <div class="product-info">
+        <h3>Wooden Lamps</h3>
+        <p>Warm light, natural materials and unique designs created in the workshop.</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-image">PERSONALISED WOOD</div>
+      <div class="product-info">
+        <h3>Personalised Signs</h3>
+        <p>Personal touches, engraved details and solid wood made for your home.</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-image">SMALL HANDMADE GIFTS</div>
+      <div class="product-info">
+        <h3>Little Things</h3>
+        <p>Smaller handmade creations, meaningful gifts and everyday wooden pieces.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section story" id="story">
+  <div class="story-image">MADE IN THE WORKSHOP</div>
+
+  <div class="story-text">
+    <div class="eyebrow">Behind Rogers Made</div>
+    <h2 class="section-title">A little workshop.<br>A lot of imagination.</h2>
+
+    <p>
+      Rogers Made started with a love of making, experimenting and
+      turning ideas into something real.
+    </p>
+
+    <p>
+      Working with timber, creating designs, cutting, shaping,
+      finishing and bringing each piece to life — everything is
+      made with care in my own workshop.
+    </p>
+
+    <p>
+      I believe wood should be celebrated. Its grain, character
+      and imperfections are part of what makes every piece unique.
+    </p>
+  </div>
+</section>
+
+<footer id="contact">
+  <div><strong>ROGERS MADE</strong> — Handmade in wood</div>
+  <div>Made with care, in my workshop.</div>
+</footer>
+
+</body>
+</html>
