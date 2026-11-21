@@ -59,6 +59,16 @@
     return null;
   }
 
+  // A product counts as sold if it has sold: true
+  // (available: false from older entries still works too).
+  function isSold(p) {
+    return p.sold === true || p.available === false;
+  }
+
+  function hasPrice(p) {
+    return !(p.price === null || p.price === undefined || p.price === "" || isNaN(Number(p.price)));
+  }
+
   function formatMoney(value) {
     var n = Number(value);
     var fixed = n % 1 === 0 ? n.toFixed(0) : n.toFixed(2);
@@ -66,10 +76,10 @@
   }
 
   function priceHtml(p, cls) {
-    if (p.available === false) {
+    if (isSold(p)) {
       return '<div class="' + cls + ' on-request"><small>Availability</small>Sold — enquire for similar</div>';
     }
-    if (p.price === null || p.price === undefined || p.price === "") {
+    if (!hasPrice(p)) {
       return '<div class="' + cls + ' on-request"><small>Price</small>Price on request</div>';
     }
     return '<div class="' + cls + '"><small>' + (p.priceFrom ? "From" : "Price") + "</small>" +
@@ -82,12 +92,13 @@
   function cardHtml(p, index) {
     var cat = categoryById(p.category);
     var image = (p.images && p.images[0]) || "";
-    var badge = p.available === false ? "Sold" : p.badge;
+    var sold = isSold(p);
+    var badge = sold ? "Sold" : p.badge;
     var delay = " reveal-delay-" + (index % 3);
     return '' +
-      '<article class="product reveal' + delay + '">' +
-        '<a class="product-image" href="' + productUrl(p) + '" aria-label="View ' + esc(p.name) + '">' +
-          (badge ? '<span class="product-badge">' + esc(badge) + "</span>" : "") +
+      '<article class="product reveal' + delay + (sold ? " is-sold" : "") + '">' +
+        '<a class="product-image" href="' + productUrl(p) + '" aria-label="View ' + esc(p.name) + (sold ? " (sold)" : "") + '">' +
+          (badge ? '<span class="product-badge' + (sold ? " sold" : "") + '">' + esc(badge) + "</span>" : "") +
           (image
             ? picture(image, p.name, [480, 720, 960], "(max-width: 800px) 92vw, (max-width: 1100px) 45vw, 30vw")
             : "PHOTO COMING SOON") +
@@ -341,6 +352,7 @@
     root.innerHTML =
       '<div class="product-detail">' +
         '<div class="gallery">' +
+          (isSold(p) ? '<span class="product-badge sold detail-sold">Sold</span>' : "") +
           '<div class="gallery-main" data-gallery-main>' +
             (images[0] ? picture(images[0], p.name, [800, 1200, 1600], "(max-width: 900px) 92vw, 50vw", true) : "") +
           "</div>" +
@@ -358,7 +370,7 @@
           '<div class="detail-description">' + paragraphs.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + "</div>" +
           (details ? '<ul class="detail-list">' + details + "</ul>" : "") +
           '<div class="detail-actions">' +
-            '<a class="button" href="' + enquireUrl(p) + '">' + (p.available === false ? "Ask about a similar piece" : "Enquire about this piece") + "</a>" +
+            '<a class="button" href="' + enquireUrl(p) + '">' + (isSold(p) ? "Ask about a similar piece" : "Enquire about this piece") + "</a>" +
             '<a class="button button-outline" href="/shop' + (cat ? "?category=" + esc(cat.id) : "") + '">Back to shop</a>' +
           "</div>" +
           '<p class="detail-note">Every piece is made by hand, so grain, colour and small details will vary. Send an enquiry and I\'ll confirm price, timings and delivery or collection with you directly.</p>' +
@@ -429,7 +441,7 @@
       }, 600);
     }
 
-    // Prefill from the address bar, e.g. /?enquire=oak-serving-board#contact
+    // Prefill from the address bar, e.g. /?enquire=lamp-01#contact
     var params = new URLSearchParams(location.search);
     if (params.get("enquire")) prefillProduct(params.get("enquire"));
     if (params.get("type") === "commission") setType("Custom commission");

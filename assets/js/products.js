@@ -2,35 +2,48 @@
    ROGERS MADE — PRODUCTS
    ---------------------------------------------------------
    This is the ONLY file you need to edit to add, change or
-   remove products. The home page, shop page and product
-   pages all update automatically.
+   remove products. The home page, shop page, category
+   counts and product pages all update automatically.
 
    TO ADD A PRODUCT
    1. Upload your photos to:  assets/images/products/
-   2. Copy one of the product blocks below (from { to },)
-   3. Paste it into the list and change the details.
+   2. Copy the TEMPLATE block at the bottom of this file
+      (everything from { to },) and paste it into the
+      ROGERS_PRODUCTS list below.
+   3. Change the details and save. That's it.
+
+   TO REMOVE A PRODUCT
+   Delete its whole block, from { to }, (including the comma).
+
+   TO MARK A PRODUCT AS SOLD
+   Change  sold: false  to  sold: true
+   The product stays on the site with a SOLD label, and the
+   button changes to "Ask about a similar piece".
 
    PRODUCT FIELDS
    id          Unique short name used in the web address.
                Lowercase letters, numbers and dashes only,
-               e.g. "oak-table-lamp"
-   name        Product name shown on the card
+               e.g. "oak-table-lamp". Every id must be different.
+   name        Product name shown on the card and product page
    category    One of: "lamps", "signs", "oak-gifts", "bespoke"
-   price       A number, e.g. 85 or 42.50 — shown as £85.00
+   price       A number, e.g. 85 or 42.50 — shown as £85
                Use null to show "Price on request"
    priceFrom   true to show "From £85" (useful for
                personalised or made-to-order sizes)
    summary     One or two sentences for the product card
-   description Longer text for the product page. Use an
-               array of paragraphs: ["First...", "Second..."]
+   description Longer text for the product page. Use a list
+               of paragraphs: ["First...", "Second..."]
    images      List of photos. The first is the main image.
                e.g. ["/assets/images/products/lamp-1.jpg"]
+               Use [] if you don't have a photo yet.
    details     Optional list of [label, value] pairs shown on
                the product page, e.g. ["Timber", "Solid oak"]
+               Use [] to show none.
    badge       Optional small label on the card, e.g.
-               "Made to order", "One of a kind", "Sold"
+               "Made to order", "One of a kind". "" for none.
    featured    true to show the product on the home page
-   available   false to mark a piece as sold / unavailable
+               (the first 6 featured products are shown)
+   sold        true to show a SOLD label (product stays listed)
    ========================================================= */
 
 window.ROGERS_CATEGORIES = [
@@ -60,166 +73,195 @@ window.ROGERS_CATEGORIES = [
   }
 ];
 
+/* ---------------------------------------------------------
+   YOUR PRODUCTS
+   The entries below are starter slots, ready for your real
+   pieces. Replace the name, text and photos with your own.
+   (The photos currently used are temporary stock images
+   from assets/images/placeholders/.)
+   --------------------------------------------------------- */
+
 window.ROGERS_PRODUCTS = [
   {
-    id: "ringed-pendant-light",
-    name: "Ringed Hardwood Pendant Light",
+    id: "lamp-01",
+    name: "Handmade Lamp No. 1",
     category: "lamps",
     price: null,
     priceFrom: false,
-    summary: "Turned hardwood rings around a single warm bulb, made to hang above a table or reading corner.",
+    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
     description: [
-      "Layered rings of hardwood surround a single bulb, so the grain glows when the light is on.",
-      "Each pendant is made to order in the workshop, so final sizes and timber can be discussed when you enquire."
+      "Full details for this piece are being added.",
+      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
     ],
     images: ["/assets/images/placeholders/lamp-pendant.jpg"],
     details: [
-      ["Timber", "Hardwood — to be confirmed"],
-      ["Made", "By hand, in the UK"],
-      ["Lead time", "Confirmed on enquiry"]
+      ["Made", "By hand in my UK workshop"]
     ],
-    badge: "Made to order",
+    badge: "",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "hardwood-lantern",
-    name: "Hardwood Lantern",
+    id: "lamp-02",
+    name: "Handmade Lamp No. 2",
     category: "lamps",
     price: null,
     priceFrom: false,
-    summary: "A framed hardwood lantern with a soft, diffused glow for shelves, hallways and windowsills.",
+    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
     description: [
-      "A simple hardwood frame with a diffused panel to soften the light.",
-      "Made by hand in the workshop. Get in touch to talk through size and finish."
+      "Full details for this piece are being added.",
+      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
     ],
     images: ["/assets/images/placeholders/lamp-lantern.jpg"],
     details: [
-      ["Timber", "Hardwood — to be confirmed"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "hardwood-bulb-lamp",
-    name: "Hardwood Base Bulb Lamp",
+    id: "lamp-03",
+    name: "Handmade Lamp No. 3",
     category: "lamps",
     price: null,
     priceFrom: false,
-    summary: "An exposed-bulb table lamp on a solid hardwood base. Simple, warm and honest.",
+    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
     description: [
-      "A solid hardwood base paired with an exposed bulb for a warm, low glow.",
-      "Each base is cut and finished by hand, so the grain will be different on every lamp."
+      "Full details for this piece are being added.",
+      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
     ],
     images: ["/assets/images/placeholders/lamp-bulb.jpg"],
     details: [
-      ["Timber", "Hardwood — to be confirmed"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "personalised-engraved-board",
-    name: "Personalised Engraved Board",
+    id: "sign-01",
+    name: "Personalised Sign No. 1",
     category: "signs",
     price: null,
-    priceFrom: true,
-    summary: "A solid wood board engraved with a name, date or short message of your choice.",
+    priceFrom: false,
+    summary: "Photos and full details for this piece are on their way. Enquire with the wording you'd like.",
     description: [
-      "A solid wood board personalised with the name, date or words you choose.",
-      "Tell me what you'd like engraved when you enquire and I'll confirm the layout before making it."
+      "Full details for this piece are being added.",
+      "Tell me the wording you'd like when you enquire, and I'll confirm the design, size and price with you before anything is made."
     ],
     images: ["/assets/images/placeholders/sign-engraved.jpg"],
     details: [
-      ["Personalisation", "Name, date or message"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "Personalised",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "personalised-house-sign",
-    name: "Personalised House Sign",
+    id: "sign-02",
+    name: "Personalised Sign No. 2",
     category: "signs",
     price: null,
-    priceFrom: true,
-    summary: "A house name or number sign in solid timber, made to your wording and size.",
+    priceFrom: false,
+    summary: "Photos and full details for this piece are on their way. Enquire with the wording you'd like.",
     description: [
-      "A solid timber sign made with your house name or number.",
-      "Share your wording and preferred size and I'll come back to you with options and a price."
+      "Full details for this piece are being added.",
+      "Tell me the wording you'd like when you enquire, and I'll confirm the design, size and price with you before anything is made."
     ],
     images: ["/assets/images/placeholders/sign-planks.jpg"],
     details: [
-      ["Personalisation", "House name or number"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "Personalised",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "oak-serving-board",
-    name: "Oak Serving Board",
+    id: "oak-gift-01",
+    name: "Oak Gift No. 1",
     category: "oak-gifts",
     price: null,
     priceFrom: false,
-    summary: "A solid oak serving board with a shaped handle, made for the table and the kitchen.",
+    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
     description: [
-      "Cut from solid oak and shaped by hand, with a handle for carrying to the table.",
-      "Can be personalised with initials or a short message. Just ask when you enquire."
+      "Full details for this piece are being added.",
+      "Send an enquiry and I'll share photos, sizes and a price with you directly."
     ],
     images: ["/assets/images/placeholders/decor-boards.jpg"],
     details: [
-      ["Timber", "Solid oak"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "",
     featured: true,
-    available: true
+    sold: false
   },
   {
-    id: "turned-hardwood-bowl",
-    name: "Hardwood Bowl",
+    id: "oak-gift-02",
+    name: "Oak Gift No. 2",
     category: "oak-gifts",
     price: null,
     priceFrom: false,
-    summary: "A small hardwood bowl for keys, jewellery or dried flowers. A simple, lasting gift.",
+    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
     description: [
-      "A small bowl shaped from hardwood, finished to bring out the grain.",
-      "Every bowl comes from a different piece of timber, so no two are quite the same."
+      "Full details for this piece are being added.",
+      "Send an enquiry and I'll share photos, sizes and a price with you directly."
     ],
     images: ["/assets/images/placeholders/gift-bowl.jpg"],
     details: [
-      ["Timber", "Hardwood — to be confirmed"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "",
     featured: false,
-    available: true
+    sold: false
   },
   {
-    id: "bespoke-side-table",
-    name: "Bespoke Side Table",
+    id: "bespoke-01",
+    name: "Bespoke Piece No. 1",
     category: "bespoke",
     price: null,
     priceFrom: false,
-    summary: "A side table designed around your space, made in the timber and finish you choose.",
+    summary: "Photos and full details for this piece are on their way. Enquire to talk through your own idea.",
     description: [
-      "A side table designed to fit your room, from the height and size to the timber and finish.",
-      "Start with an enquiry and we'll work through the design together before anything is made."
+      "Full details for this piece are being added.",
+      "Bespoke pieces start with a conversation. Send an enquiry with your idea and we'll work through the design, timber, size and price together before anything is made."
     ],
     images: ["/assets/images/placeholders/decor-sidetable.jpg"],
     details: [
-      ["Design", "Made to your measurements"],
-      ["Made", "By hand, in the UK"]
+      ["Made", "By hand in my UK workshop"]
     ],
     badge: "Commission",
     featured: false,
-    available: true
+    sold: false
   }
 ];
+
+/* ---------------------------------------------------------
+   TEMPLATE — copy this block into the list above
+   (paste it before the final ];  and keep the comma after })
+
+  {
+    id: "my-new-product",
+    name: "My New Product",
+    category: "lamps",
+    price: null,
+    priceFrom: false,
+    summary: "One or two sentences for the product card.",
+    description: [
+      "First paragraph for the product page.",
+      "Second paragraph for the product page."
+    ],
+    images: [
+      "/assets/images/products/my-new-product-1.jpg",
+      "/assets/images/products/my-new-product-2.jpg"
+    ],
+    details: [
+      ["Timber", "Solid oak"],
+      ["Size", "30cm tall"]
+    ],
+    badge: "",
+    featured: false,
+    sold: false
+  },
+
+   --------------------------------------------------------- */
