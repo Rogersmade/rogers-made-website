@@ -1114,12 +1114,85 @@ nav a[aria-current="page"] {
 .gallery { position: relative; }
 .detail-sold { top: 18px; left: 18px; font-size: 11px; padding: 8px 14px; }
 .gallery-main {
+  position: relative;
   aspect-ratio: 4 / 3.6;
   background: #1b1a17;
   border: 1px solid var(--line);
   overflow: hidden;
 }
 .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Main photo — click/tap to open the full-screen viewer */
+.gallery-zoom {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  touch-action: pan-y;
+}
+.gallery-zoom > span[data-gallery-image] { display: block; width: 100%; height: 100%; }
+.gallery-zoom img { transition: transform 1s var(--ease); }
+.gallery-zoom:hover img { transform: scale(1.03); }
+.gallery-zoom-hint {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 17, 15, .72);
+  border: 1px solid #5a4630;
+  color: var(--gold);
+  opacity: .85;
+  transition: opacity .25s, border-color .25s;
+}
+.gallery-zoom:hover .gallery-zoom-hint,
+.gallery-zoom:focus-visible .gallery-zoom-hint { opacity: 1; border-color: var(--gold); }
+.gallery-zoom-hint svg { width: 18px; height: 18px; }
+
+.gallery-arrow,
+.viewer-arrow,
+.viewer-close {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: rgba(17, 17, 15, .72);
+  border: 1px solid #5a4630;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background .25s, border-color .25s, color .25s;
+}
+.gallery-arrow { top: 50%; transform: translateY(-50%); }
+.gallery-arrow.prev, .viewer-arrow.prev { left: 14px; }
+.gallery-arrow.next, .viewer-arrow.next { right: 14px; }
+.gallery-arrow svg, .viewer-arrow svg, .viewer-close svg { width: 20px; height: 20px; }
+.gallery-arrow.prev svg, .viewer-arrow.prev svg { transform: rotate(180deg); }
+.gallery-arrow:hover, .viewer-arrow:hover, .viewer-close:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #11110f;
+}
+.gallery-count,
+.viewer-count {
+  position: absolute;
+  z-index: 3;
+  background: rgba(17, 17, 15, .78);
+  border: 1px solid #5a4630;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 7px 11px;
+  pointer-events: none;
+}
+.gallery-count { left: 16px; bottom: 16px; }
 .gallery-thumbs {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1139,6 +1212,40 @@ nav a[aria-current="page"] {
 .gallery-thumbs button:hover,
 .gallery-thumbs button[aria-current="true"] { opacity: 1; border-color: var(--oak); }
 .gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Full-screen photo viewer */
+body.viewer-open { overflow: hidden; }
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 9, .985);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: viewer-in .3s var(--ease);
+}
+@keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
+.viewer-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px 80px;
+  touch-action: pan-y;
+}
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+}
+.viewer-close { top: 18px; right: 18px; }
+.viewer-arrow { top: 50%; transform: translateY(-50%); }
+.viewer-count { left: 50%; bottom: 22px; transform: translateX(-50%); }
 
 .detail-info { position: sticky; top: 120px; }
 .detail-info h1 {
@@ -1380,6 +1487,12 @@ nav a[aria-current="page"] {
   .story-facts div { padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
   .hero-actions .button { flex: 1 1 100%; }
   .product-meta { flex-direction: column; align-items: flex-start; }
-  .gallery-thumbs { grid-template-columns: repeat(4, 1fr); }
+  .gallery-thumbs { grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
+  .gallery-arrow { width: 38px; height: 38px; }
+  .gallery-arrow.prev { left: 10px; }
+  .gallery-arrow.next { right: 10px; }
+  .viewer-stage { padding: 66px 12px 70px; }
+  .viewer-arrow { top: auto; bottom: 14px; transform: none; }
+  .viewer-count { bottom: 26px; }
   .form-success { padding: 40px 22px; }
 }

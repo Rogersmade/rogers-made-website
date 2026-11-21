@@ -315,6 +315,135 @@
     render(new URLSearchParams(location.search).get("category") || "all", false);
   }
 
+  /* ---------- Product gallery & photo viewer ---------- */
+
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+  var ZOOM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  var CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  // Calls back with -1 / 1 when the element is swiped left or right
+  function onSwipe(el, callback) {
+    var startX = null, startY = null;
+    el.addEventListener("touchstart", function (e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    el.addEventListener("touchend", function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      startX = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) callback(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+
+  function initGallery(root, images, photoAlt) {
+    var main = root.querySelector("[data-gallery-main]");
+    if (!main || !images[0]) return;
+
+    var holder = main.querySelector("[data-gallery-image]");
+    var count = main.querySelector("[data-gallery-count]");
+    var thumbs = root.querySelectorAll(".gallery-thumbs button");
+    var current = 0;
+    var swiped = false;
+
+    function show(i) {
+      current = (i + images.length) % images.length;
+      holder.innerHTML = picture(images[current], photoAlt(current), [800, 1200, 1600], "(max-width: 900px) 92vw, 50vw", true);
+      if (count) count.textContent = (current + 1) + " / " + images.length;
+      thumbs.forEach(function (b, n) {
+        if (n === current) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+      });
+    }
+
+    thumbs.forEach(function (btn) {
+      btn.addEventListener("click", function () { show(Number(btn.getAttribute("data-index"))); });
+    });
+    main.querySelectorAll("[data-gallery-step]").forEach(function (btn) {
+      btn.addEventListener("click", function () { show(current + Number(btn.getAttribute("data-gallery-step"))); });
+    });
+    if (images.length > 1) {
+      onSwipe(main, function (dir) {
+        swiped = true;
+        setTimeout(function () { swiped = false; }, 400);
+        show(current + dir);
+      });
+    }
+    main.querySelector("[data-gallery-open]").addEventListener("click", function (e) {
+      if (swiped) { swiped = false; e.preventDefault(); return; }
+      openViewer(images, current, photoAlt, show);
+    });
+
+    // Preload the next photos so switching feels instant
+    if (images.length > 1 && useImageCdn) {
+      setTimeout(function () {
+        images.slice(1).forEach(function (src) { new Image().src = imgUrl(src, 1200); });
+      }, 1500);
+    }
+  }
+
+  function openViewer(images, start, photoAlt, onChange) {
+    var multi = images.length > 1;
+    var current = start;
+    var opener = document.activeElement;
+
+    var box = document.createElement("div");
+    box.className = "viewer";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", "Photo viewer");
+    box.innerHTML =
+      '<div class="viewer-stage" data-viewer-stage></div>' +
+      '<button type="button" class="viewer-close" aria-label="Close photo viewer">' + CLOSE + "</button>" +
+      (multi
+        ? '<button type="button" class="viewer-arrow prev" data-step="-1" aria-label="Previous photo">' + CHEVRON + "</button>" +
+          '<button type="button" class="viewer-arrow next" data-step="1" aria-label="Next photo">' + CHEVRON + "</button>" +
+          '<div class="viewer-count" aria-live="polite" data-viewer-count></div>'
+        : "");
+
+    var stage = box.querySelector("[data-viewer-stage]");
+    var countEl = box.querySelector("[data-viewer-count]");
+
+    function show(i) {
+      current = (i + images.length) % images.length;
+      stage.innerHTML = picture(images[current], photoAlt(current), [1000, 1536], "100vw", true);
+      if (countEl) countEl.textContent = (current + 1) + " / " + images.length;
+      if (onChange) onChange(current);
+    }
+
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      document.body.classList.remove("viewer-open");
+      box.remove();
+      if (opener && opener.focus) opener.focus();
+    }
+
+    function onKey(e) {
+      if (e.key === "Escape") close();
+      else if (multi && e.key === "ArrowRight") show(current + 1);
+      else if (multi && e.key === "ArrowLeft") show(current - 1);
+      else if (e.key === "Tab") {
+        var focusable = box.querySelectorAll("button");
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
+    box.querySelector(".viewer-close").addEventListener("click", close);
+    box.querySelectorAll("[data-step]").forEach(function (btn) {
+      btn.addEventListener("click", function () { show(current + Number(btn.getAttribute("data-step"))); });
+    });
+    stage.addEventListener("click", function (e) { if (e.target === stage) close(); });
+    if (multi) onSwipe(stage, function (dir) { show(current + dir); });
+    document.addEventListener("keydown", onKey);
+
+    show(current);
+    document.body.appendChild(box);
+    document.body.classList.add("viewer-open");
+    box.querySelector(".viewer-close").focus();
+  }
+
   /* ---------- Product page ---------- */
 
   function initProduct() {
@@ -334,6 +463,11 @@
     var cat = categoryById(p.category);
     var images = (p.images && p.images.length) ? p.images : [""];
     var paragraphs = Array.isArray(p.description) ? p.description : [p.description || p.summary];
+    var multi = images.length > 1;
+
+    function photoAlt(i) {
+      return multi ? p.name + " — photo " + (i + 1) + " of " + images.length : p.name;
+    }
 
     document.title = p.name + " | Rogers Made";
     var meta = document.querySelector('meta[name="description"]');
@@ -354,11 +488,21 @@
         '<div class="gallery">' +
           (isSold(p) ? '<span class="product-badge sold detail-sold">Sold</span>' : "") +
           '<div class="gallery-main" data-gallery-main>' +
-            (images[0] ? picture(images[0], p.name, [800, 1200, 1600], "(max-width: 900px) 92vw, 50vw", true) : "") +
+            (images[0]
+              ? '<button type="button" class="gallery-zoom" data-gallery-open aria-label="View larger photo">' +
+                  '<span data-gallery-image>' + picture(images[0], photoAlt(0), [800, 1200, 1600], "(max-width: 900px) 92vw, 50vw", true) + "</span>" +
+                  '<span class="gallery-zoom-hint" aria-hidden="true">' + ZOOM + "</span>" +
+                "</button>"
+              : "") +
+            (multi
+              ? '<button type="button" class="gallery-arrow prev" data-gallery-step="-1" aria-label="Previous photo">' + CHEVRON + "</button>" +
+                '<button type="button" class="gallery-arrow next" data-gallery-step="1" aria-label="Next photo">' + CHEVRON + "</button>" +
+                '<span class="gallery-count" aria-live="polite" data-gallery-count>1 / ' + images.length + "</span>"
+              : "") +
           "</div>" +
-          (images.length > 1
+          (multi
             ? '<div class="gallery-thumbs">' + images.map(function (src, i) {
-                return '<button type="button" data-src="' + esc(src) + '" aria-label="Show photo ' + (i + 1) + '"' +
+                return '<button type="button" data-index="' + i + '" aria-label="Show photo ' + (i + 1) + " of " + images.length + '"' +
                   (i === 0 ? ' aria-current="true"' : "") + ">" + picture(src, "", [200, 300], "120px") + "</button>";
               }).join("") + "</div>"
             : "") +
@@ -377,14 +521,7 @@
         "</div>" +
       "</div>";
 
-    var main = root.querySelector("[data-gallery-main]");
-    root.querySelectorAll(".gallery-thumbs button").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        main.innerHTML = picture(btn.getAttribute("data-src"), p.name, [800, 1200, 1600], "(max-width: 900px) 92vw, 50vw", true);
-        root.querySelectorAll(".gallery-thumbs button").forEach(function (b) { b.removeAttribute("aria-current"); });
-        btn.setAttribute("aria-current", "true");
-      });
-    });
+    initGallery(root, images, photoAlt);
 
     var related = document.querySelector("[data-related]");
     if (related) {
