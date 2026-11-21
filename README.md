@@ -10,7 +10,7 @@ A fast, static website for Rogers Made, hosted on Netlify with no build step. Cu
 | --- | --- | --- |
 | Home | `index.html` | Hero, featured products, categories, workshop, story, commissions, enquiry form |
 | Shop | `shop.html` | All products, filterable by category (e.g. `/shop?category=lamps`) |
-| Product | `product.html` | One product's page, e.g. `/product?id=lamp-01` |
+| Product | `product.html` | One product's page, e.g. `/product?id=oak-house-number-plaque` |
 | Thank you | `thank-you.html` | Shown if the form is sent without JavaScript |
 | 404 | `404.html` | Page not found |
 
@@ -42,7 +42,7 @@ All products are in **`assets/js/products.js`**. The home page, shop, category c
 - **Set a price:** change `price: null` to a number, e.g. `price: 85`.
 - **Mark as sold:** change `sold: false` to `sold: true`. The product stays on the site with a gold SOLD label, and its button becomes "Ask about a similar piece".
 
-The first real piece, the **Handmade Oak House Number Plaque** (`/product?id=oak-house-number-plaque`), has a five-photo gallery. The site also has seven **starter slots** (e.g. "Handmade Lamp No. 1"). They have no invented details and use temporary stock photos. Replace each one with a real piece, or delete the ones you don't need.
+Every listed product is a genuine Rogers Made piece with its own photos: the Handmade Oak House Number Plaque, the three Christmas lights and the Personalised Oak Keyring. The earlier placeholder "starter slots" have been removed.
 
 Category names, descriptions and images are at the top of the same file (`ROGERS_CATEGORIES`).
 

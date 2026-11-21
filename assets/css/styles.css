@@ -91,6 +91,28 @@ header {
   color: #b88a54;
 }
 
+/* Rogers Made badge logo (header + footer) */
+.site-header {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.logo:has(img) {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+  border-radius: 50%;
+}
+.logo img {
+  width: 170px;
+  height: auto;
+  transition: transform .4s var(--ease), width .4s var(--ease);
+}
+/* Once the page is scrolled, the sticky header tucks the logo in */
+.header-compact .site-header .logo img { width: 96px; }
+.site-header { transition: padding .4s var(--ease); }
+html { scroll-padding-top: 130px; }
+.logo:hover img { transform: scale(1.04); }
+
 nav a {
   color: #eee;
   text-decoration: none;
@@ -146,6 +168,36 @@ nav a[aria-current="page"] {
 
 .hero-content {
   max-width: 650px;
+}
+
+/* Workshop photo, blended into the right of the hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-visual {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 56%;
+  pointer-events: none;
+}
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+  opacity: .85;
+  filter: brightness(.82) saturate(.85) contrast(1.05);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 34%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 34%, #000 92%, transparent 100%);
+  animation: heroPhotoIn 1.6s var(--ease) .2s both;
+}
+@keyframes heroPhotoIn {
+  from { opacity: 0; transform: scale(1.03); }
+  to { opacity: .85; transform: none; }
 }
 
 .eyebrow {
@@ -995,6 +1047,7 @@ nav a[aria-current="page"] {
   max-width: 300px;
 }
 .footer-brand .logo { font-size: 24px; }
+.footer-brand .logo img { width: 120px; }
 
 .site-footer h4 {
   color: var(--gold);
@@ -1212,6 +1265,10 @@ nav a[aria-current="page"] {
 .gallery-thumbs button:hover,
 .gallery-thumbs button[aria-current="true"] { opacity: 1; border-color: var(--oak); }
 .gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+/* Charts and similar images are shown in full, not cropped */
+.product-image img.fit-contain,
+.gallery-main img.fit-contain,
+.gallery-thumbs img.fit-contain { object-fit: contain; }
 
 /* Full-screen photo viewer */
 body.viewer-open { overflow: hidden; }
@@ -1434,11 +1491,33 @@ body.viewer-open { overflow: hidden; }
 
 @media (max-width: 800px) {
   .logo { font-size: 22px; }
+  .site-header .logo img { width: 128px; }
+  .header-compact .site-header .logo img,
+  .nav-open .site-header .logo img { width: 76px; }
+  .site-header { padding-top: 10px; padding-bottom: 10px; }
+  html { scroll-padding-top: 105px; }
 
   .hero {
     min-height: 65vh;
     padding: 70px 7%;
   }
+  .hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
+  .hero-visual {
+    position: relative;
+    width: auto;
+    height: 380px;
+    margin: 10px -7% 0;
+  }
+  .hero-visual img {
+    object-position: center top;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
+  }
+
 
   .section {
     padding: 65px 7%;
@@ -1486,6 +1565,8 @@ body.viewer-open { overflow: hidden; }
   .story-facts { grid-template-columns: 1fr; }
   .story-facts div { padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
   .hero-actions .button { flex: 1 1 100%; }
+  /* Keep the hero tagline on one line on phones */
+  .hero .eyebrow { letter-spacing: 3px; }
   .product-meta { flex-direction: column; align-items: flex-start; }
   .gallery-thumbs { grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
   .gallery-arrow { width: 38px; height: 38px; }
@@ -1495,4 +1576,12 @@ body.viewer-open { overflow: hidden; }
   .viewer-arrow { top: auto; bottom: 14px; transform: none; }
   .viewer-count { bottom: 26px; }
   .form-success { padding: 40px 22px; }
+}
+
+@media (max-width: 380px) {
+  .hero .eyebrow { letter-spacing: 2.2px; }
+}
+
+@media (max-width: 340px) {
+  .hero .eyebrow { font-size: 11px; letter-spacing: 2px; }
 }

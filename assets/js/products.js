@@ -36,6 +36,9 @@
    images      List of photos. The first is the main image.
                e.g. ["/assets/images/products/lamp-1.jpg"]
                Use [] if you don't have a photo yet.
+               To show a photo in full without cropping (e.g. a
+               chart), write it as:
+               { src: "/assets/images/products/chart.png", fit: "contain" }
    details     Optional list of [label, value] pairs shown on
                the product page, e.g. ["Timber", "Solid oak"]
                Use [] to show none.
@@ -44,6 +47,9 @@
    featured    true to show the product on the home page
                (the first 6 featured products are shown)
    sold        true to show a SOLD label (product stays listed)
+   enquiryMessage  Optional starting text for the enquiry form
+               when someone enquires about this product. Use \n
+               for a new line.
    ========================================================= */
 
 window.ROGERS_CATEGORIES = [
@@ -75,71 +81,12 @@ window.ROGERS_CATEGORIES = [
 
 /* ---------------------------------------------------------
    YOUR PRODUCTS
-   The Oak House Number Plaque uses real photos. The other
-   entries are starter slots, ready for your real pieces.
-   Replace the name, text and photos with your own.
-   (Starter slots use temporary stock images from
-   assets/images/placeholders/.)
+   Every product below is a genuine Rogers Made piece shown
+   with your own photos. Add new pieces using the TEMPLATE
+   at the bottom of this file.
    --------------------------------------------------------- */
 
 window.ROGERS_PRODUCTS = [
-  {
-    id: "lamp-01",
-    name: "Handmade Lamp No. 1",
-    category: "lamps",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
-    description: [
-      "Full details for this piece are being added.",
-      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
-    ],
-    images: ["/assets/images/placeholders/lamp-pendant.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "",
-    featured: true,
-    sold: false
-  },
-  {
-    id: "lamp-02",
-    name: "Handmade Lamp No. 2",
-    category: "lamps",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
-    description: [
-      "Full details for this piece are being added.",
-      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
-    ],
-    images: ["/assets/images/placeholders/lamp-lantern.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "",
-    featured: true,
-    sold: false
-  },
-  {
-    id: "lamp-03",
-    name: "Handmade Lamp No. 3",
-    category: "lamps",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
-    description: [
-      "Full details for this piece are being added.",
-      "Send an enquiry and I'll share photos, sizes, timber and a price with you directly."
-    ],
-    images: ["/assets/images/placeholders/lamp-bulb.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "",
-    featured: true,
-    sold: false
-  },
   {
     id: "oak-house-number-plaque",
     name: "Handmade Oak House Number Plaque",
@@ -169,80 +116,119 @@ window.ROGERS_PRODUCTS = [
     sold: false
   },
   {
-    id: "sign-02",
-    name: "Personalised Sign No. 2",
-    category: "signs",
+    id: "christmas-tree-of-life-light",
+    name: "Christmas Tree of Life Light",
+    category: "lamps",
     price: null,
     priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire with the wording you'd like.",
+    summary: "A gold Tree of Life cut-out lit from behind, on a solid wood base reading \"Christmas with the Rogers\".",
     description: [
-      "Full details for this piece are being added.",
-      "Tell me the wording you'd like when you enquire, and I'll confirm the design, size and price with you before anything is made."
+      "A round Tree of Life cut-out, finished in gold, with a small heart at the centre of the trunk. It stands in a solid wood base and glows warmly from a candle-style light set behind it.",
+      "Green lettering reads \"Christmas with the\" across the top of the base, with \"ROGERS\" in bold raised letters on the front.",
+      "Send an enquiry to ask about this piece, and I'll confirm the details and price with you directly."
     ],
-    images: ["/assets/images/placeholders/sign-planks.jpg"],
+    images: [
+      "/assets/images/products/christmas-tree-of-life-light-1.jpg",
+      "/assets/images/products/christmas-lights-collection.jpg",
+      "/assets/images/products/christmas-moon-sleigh-light-1.jpg",
+      "/assets/images/products/christmas-moon-sleigh-light-2.jpg",
+      "/assets/images/products/christmas-star-tree-light-1.jpg",
+      "/assets/images/products/christmas-star-tree-light-2.jpg"
+    ],
     details: [
+      ["Shown", "\"Christmas with the Rogers\""],
+      ["Base", "Solid wood"],
+      ["Made", "By hand in my UK workshop"]
+    ],
+    badge: "Christmas",
+    featured: true,
+    sold: false
+  },
+  {
+    id: "christmas-moon-sleigh-light",
+    name: "Christmas Moon & Sleigh Light",
+    category: "lamps",
+    price: null,
+    priceFrom: false,
+    summary: "A gold crescent moon scene with Santa's sleigh and reindeer, lit from behind on a solid wood base.",
+    description: [
+      "A gold crescent moon cut-out with Santa's sleigh and reindeer flying across the top, a hanging lantern, stars, and a snowy winter scene below with a cottage, fir trees and a reindeer.",
+      "It stands in a solid wood base with red \"Christmas with the\" lettering, and glows warmly from a candle-style light set behind it. The photos show two lettering styles: a single line, and a two-line script \"Christmas With The\".",
+      "Send an enquiry to ask about this piece, and I'll confirm the details and price with you directly."
+    ],
+    images: [
+      "/assets/images/products/christmas-moon-sleigh-light-1.jpg",
+      "/assets/images/products/christmas-moon-sleigh-light-2.jpg",
+      "/assets/images/products/christmas-lights-collection.jpg"
+    ],
+    details: [
+      ["Shown", "\"Christmas with the\" in red"],
+      ["Base", "Solid wood"],
+      ["Made", "By hand in my UK workshop"]
+    ],
+    badge: "Christmas",
+    featured: true,
+    sold: false
+  },
+  {
+    id: "christmas-star-tree-light",
+    name: "Christmas Star Tree Light",
+    category: "lamps",
+    price: null,
+    priceFrom: false,
+    summary: "A Christmas tree made of solid and outline stars, lit from behind on a solid wood base.",
+    description: [
+      "A Christmas tree shape built from stacked wooden stars, solid stars mixed with smaller outline stars, standing in a solid wood base.",
+      "Red \"Christmas with the\" lettering sits across the front, and a warm candle-style light glows behind the stars. The photos show two lettering styles: a single line, and a two-line script \"Christmas With The\".",
+      "Send an enquiry to ask about this piece, and I'll confirm the details and price with you directly."
+    ],
+    images: [
+      "/assets/images/products/christmas-star-tree-light-1.jpg",
+      "/assets/images/products/christmas-star-tree-light-2.jpg",
+      "/assets/images/products/christmas-lights-collection.jpg"
+    ],
+    details: [
+      ["Shown", "\"Christmas with the\" in red"],
+      ["Base", "Solid wood"],
+      ["Made", "By hand in my UK workshop"]
+    ],
+    badge: "Christmas",
+    featured: true,
+    sold: false
+  },
+  {
+    id: "personalised-oak-keyring",
+    name: "Personalised Oak Keyring",
+    category: "oak-gifts",
+    price: null,
+    priceFrom: false,
+    summary: "A handmade oak keyring engraved with your name or wording, in your choice of font, interest logo and ring colour.",
+    description: [
+      "A solid oak keyring, made by hand and engraved with the name or wording of your choice. The photos show real examples, including \"TOMMY\" with a DIY tools logo and \"SARAH\" with a flower.",
+      "Choose your font: 1 Brittany Signature (elegant, handwritten script), 2 Bebas Neue (bold, clean and modern), 3 Cooper Black (chunky, retro and friendly) or 4 Cinzel (classic, traditional and stylish).",
+      "Add an optional interest logo, a small engraved logo for your favourite hobby, passion or interest. Choose from Home, Dogs, Cats, Football, Motorbikes, Cars, Fishing, Golf, DIY, Woodworking, Gaming, Music, Photography, Outdoors, Travel, Books, Beer, BBQ, Gardening, Horses, Cycling, Running, Gym, Love/Heart, Cooking, Art, Yoga and Other. Don't see your interest? Just let me know and I can create a custom logo to match your hobby or passion.",
+      "Choose your ring: a cable ring in black, green, silver, red or blue, or a clip ring where available.",
+      "The full options chart is in the photos. Send an enquiry with your text, font number, logo and ring choice, and I'll confirm the details and price with you before anything is made."
+    ],
+    images: [
+      "/assets/images/products/personalised-oak-keyrings-1.jpg",
+      "/assets/images/products/personalised-oak-keyrings-2.jpg",
+      "/assets/images/products/personalised-oak-keyrings-3.jpg",
+      { src: "/assets/images/products/personalised-oak-keyrings-options-chart.png", fit: "contain" }
+    ],
+    details: [
+      ["Timber", "Oak"],
+      ["Text", "Your name or wording"],
+      ["Font", "1 Brittany Signature, 2 Bebas Neue, 3 Cooper Black or 4 Cinzel"],
+      ["Interest logo", "Optional, from the chart or a custom logo"],
+      ["Ring colour", "Black, green, silver, red or blue"],
+      ["Attachment", "Standard ring, or clip ring where available"],
       ["Made", "By hand in my UK workshop"]
     ],
     badge: "Personalised",
     featured: true,
-    sold: false
-  },
-  {
-    id: "oak-gift-01",
-    name: "Oak Gift No. 1",
-    category: "oak-gifts",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
-    description: [
-      "Full details for this piece are being added.",
-      "Send an enquiry and I'll share photos, sizes and a price with you directly."
-    ],
-    images: ["/assets/images/placeholders/decor-boards.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "",
-    featured: true,
-    sold: false
-  },
-  {
-    id: "oak-gift-02",
-    name: "Oak Gift No. 2",
-    category: "oak-gifts",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to ask about it.",
-    description: [
-      "Full details for this piece are being added.",
-      "Send an enquiry and I'll share photos, sizes and a price with you directly."
-    ],
-    images: ["/assets/images/placeholders/gift-bowl.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "",
-    featured: false,
-    sold: false
-  },
-  {
-    id: "bespoke-01",
-    name: "Bespoke Piece No. 1",
-    category: "bespoke",
-    price: null,
-    priceFrom: false,
-    summary: "Photos and full details for this piece are on their way. Enquire to talk through your own idea.",
-    description: [
-      "Full details for this piece are being added.",
-      "Bespoke pieces start with a conversation. Send an enquiry with your idea and we'll work through the design, timber, size and price together before anything is made."
-    ],
-    images: ["/assets/images/placeholders/decor-sidetable.jpg"],
-    details: [
-      ["Made", "By hand in my UK workshop"]
-    ],
-    badge: "Commission",
-    featured: false,
-    sold: false
+    sold: false,
+    enquiryMessage: "Hi, I'd like to order a Personalised Oak Keyring.\n\nText / name: \nFont (1 Brittany Signature, 2 Bebas Neue, 3 Cooper Black, 4 Cinzel): \nInterest logo (optional): \nRing colour (black, green, silver, red or blue): \nStandard ring or clip ring: \n"
   }
 ];
 

@@ -12,6 +12,20 @@
   var PRODUCTS = window.ROGERS_PRODUCTS || [];
   var CATEGORIES = window.ROGERS_CATEGORIES || [];
 
+  // Photos can be listed as "/path.jpg" or { src: "/path.png", fit: "contain" }.
+  // "contain" photos (e.g. charts) are shown in full instead of cropped.
+  var CONTAIN = {};
+  PRODUCTS.forEach(function (p) {
+    if (!Array.isArray(p.images)) return;
+    p.images = p.images.map(function (im) {
+      if (im && typeof im === "object") {
+        if (im.fit === "contain") CONTAIN[im.src] = true;
+        return im.src || "";
+      }
+      return im;
+    }).filter(Boolean);
+  });
+
   /* ---------- Helpers ---------- */
 
   function esc(value) {
@@ -43,6 +57,7 @@
   function picture(src, alt, widths, sizes, eager) {
     var set = srcset(src, widths);
     return '<img src="' + esc(imgUrl(src, widths[widths.length - 1])) + '"' +
+      (CONTAIN[src] ? ' class="fit-contain"' : "") +
       (set ? ' srcset="' + esc(set) + '" sizes="' + esc(sizes) + '"' : "") +
       ' alt="' + esc(alt) + '"' +
       (set ? ' data-fallback="' + esc(src) + '" onerror="this.onerror=null;this.removeAttribute(\'srcset\');this.src=this.dataset.fallback"' : "") +
@@ -145,6 +160,16 @@
   function initNav() {
     var toggle = document.querySelector(".nav-toggle");
     var backdrop = document.querySelector(".nav-backdrop");
+
+    // Shrink the header logo once the page is scrolled
+    var compact = false;
+    function onScroll() {
+      var y = window.scrollY, next = compact ? y > 10 : y > 60;
+      if (next !== compact) { compact = next; document.body.classList.toggle("header-compact", next); }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
     if (!toggle) return;
 
     function setOpen(open) {
@@ -565,7 +590,7 @@
       if (productField) productField.value = p.name;
       setType(p.category === "signs" ? "Personalised sign" : p.category === "bespoke" ? "Custom commission" : "Order a product");
       if (messageField && !messageField.value) {
-        messageField.value = "Hi, I'm interested in the " + p.name + ". ";
+        messageField.value = p.enquiryMessage || ("Hi, I'm interested in the " + p.name + ". ");
       }
     }
 
@@ -578,7 +603,7 @@
       }, 600);
     }
 
-    // Prefill from the address bar, e.g. /?enquire=lamp-01#contact
+    // Prefill from the address bar, e.g. /?enquire=oak-house-number-plaque#contact
     var params = new URLSearchParams(location.search);
     if (params.get("enquire")) prefillProduct(params.get("enquire"));
     if (params.get("type") === "commission") setType("Custom commission");
