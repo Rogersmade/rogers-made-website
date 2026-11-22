@@ -27,8 +27,7 @@
     <a href="/" aria-current="page">Home</a>
     <a href="/shop">Shop</a>
     <a href="#workshop">Workshop</a>
-    <a href="#story">Our Story</a>
-    <a href="#commissions">Commissions</a>
+    <a href="#story">My Story</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -40,7 +39,7 @@
   <div class="hero-content">
     <div class="eyebrow">Handmade • Restored • Bespoke</div>
 
-    <h1>Made from wood.<br><span>Made with purpose.</span></h1>
+    <h1>Crafted from wood.<br><span>Made to mean more.</span></h1>
 
     <p>
       Unique handmade and personalised oak products, crafted in my small
@@ -51,10 +50,9 @@
 
     <div class="hero-actions">
       <a href="#shop" class="button">Explore the collection</a>
-      <a href="#commissions" class="button button-outline">Commission a piece</a>
     </div>
   </div>
-  <div class="hero-visual">
+  <div class="hero-visual" id="workshop">
     <img src="/assets/images/hero/workshop-1039.webp" srcset="/assets/images/hero/workshop-700.webp 700w, /assets/images/hero/workshop-1039.webp 1039w" sizes="(max-width: 860px) 92vw, 50vw" width="1039" height="1210" alt="The Rogers Made workshop: a timber cabin with sage green doors and windows" fetchpriority="high" decoding="async">
   </div>
 </section>
@@ -66,89 +64,30 @@
   </div>
 </div>
 
-<!-- FEATURED PRODUCTS — cards are generated from assets/js/products.js (set featured: true) -->
+<!-- THE COLLECTION — photos are in assets/images/collection/ -->
 <section class="section" id="shop">
   <div class="section-head">
     <div>
       <div class="eyebrow">The collection</div>
-      <h2 class="section-title">Made by hand. Never mass produced.</h2>
-      <p class="section-intro">
-        Small-batch creations, each with its own character. Every piece is
-        made by hand, so get in touch about any piece and I'll confirm the details with you.
-      </p>
+      <h2 class="section-title">Special Moments.<br>Handmade to last.</h2>
+      <p class="section-intro">Oak-inspired small gifts and signs to keep forever.</p>
     </div>
     <a class="text-link" href="/shop">View the full shop</a>
   </div>
 
-  <div class="products" data-featured-products>
-    <div class="product skeleton" aria-hidden="true"><div class="product-image"></div><div class="product-info"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
-    <div class="product skeleton" aria-hidden="true"><div class="product-image"></div><div class="product-info"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
-    <div class="product skeleton" aria-hidden="true"><div class="product-image"></div><div class="product-info"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
-  </div>
-  <noscript><p class="section-intro">Please enable JavaScript to browse products, or <a href="#contact">get in touch</a> to ask about current pieces.</p></noscript>
-</section>
-
-<!-- SHOP CATEGORIES — generated from ROGERS_CATEGORIES in assets/js/products.js -->
-<section class="section categories-section" id="collections">
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">Shop by category</div>
-      <h2 class="section-title">Four ways to bring wood home.</h2>
-      <p class="section-intro">From lighting to personalised gifts, everything starts as raw timber on the workshop bench.</p>
-    </div>
-    <a class="text-link" href="/shop">Browse everything</a>
-  </div>
-  <div class="categories" data-categories></div>
-</section>
-
-<!-- WORKSHOP -->
-<section class="section" id="workshop">
-  <div class="workshop-intro">
-    <figure class="workshop-feature reveal">
-      <img src="/assets/images/placeholders/workshop-tools.jpg" alt="Woodworking tools and fresh shavings on the workshop bench" loading="lazy" decoding="async" width="1600" height="1067">
+  <div class="collection-tiles">
+    <figure class="collection-tile reveal">
+      <img src="/assets/images/collection/house-signs-1200.webp" srcset="/assets/images/collection/house-signs-700.webp 525w, /assets/images/collection/house-signs-1200.webp 900w" sizes="(max-width: 800px) 86vw, 27vw" width="900" height="1200" alt="Handmade oak house sign engraved with &quot;10 Chapel Lane&quot;" loading="lazy" decoding="async">
+      <figcaption>House Signs</figcaption>
     </figure>
-    <div class="workshop-text reveal reveal-delay-1">
-      <div class="eyebrow">Inside the workshop</div>
-      <h2 class="section-title">Slow, careful work.<br>One piece at a time.</h2>
-      <hr class="rule">
-      <p>
-        Every Rogers Made piece starts and finishes in the same place: my own
-        workshop in the UK. There's no factory line and no outsourcing. Each
-        design is drawn, cut, shaped and finished by me.
-      </p>
-      <p>
-        Around 90% of the timber I use is hardwood, including oak. I choose it
-        for its strength, its weight in the hand and the grain that makes every
-        board different from the last.
-      </p>
-    </div>
-  </div>
-
-  <div class="process">
-    <article class="step reveal">
-      <div class="step-image"><img src="/assets/images/placeholders/process-timber.jpg" alt="Boards of dark hardwood timber" loading="lazy" decoding="async"></div>
-      <span class="step-number">01 — Select</span>
-      <h3>Choosing the timber</h3>
-      <p>Each board is picked for its grain, colour and character, with hardwoods like oak making up most of what I work with.</p>
-    </article>
-    <article class="step reveal reveal-delay-1">
-      <div class="step-image"><img src="/assets/images/placeholders/process-cut.jpg" alt="Hands marking out a piece of timber on the bench" loading="lazy" decoding="async"></div>
-      <span class="step-number">02 — Cut</span>
-      <h3>Marking &amp; cutting</h3>
-      <p>Designs are measured and marked out by hand, then cut to size, working with the grain rather than against it.</p>
-    </article>
-    <article class="step reveal reveal-delay-2">
-      <div class="step-image"><img src="/assets/images/placeholders/process-shape.jpg" alt="Shaping wood with a mallet and chisel" loading="lazy" decoding="async"></div>
-      <span class="step-number">03 — Shape</span>
-      <h3>Shaping &amp; detail</h3>
-      <p>Edges, curves, lettering and personal details are shaped and refined until the piece feels right in the hand.</p>
-    </article>
-    <article class="step reveal reveal-delay-3">
-      <div class="step-image"><img src="/assets/images/placeholders/process-finish.jpg" alt="Sanding a finished wooden piece by hand" loading="lazy" decoding="async"></div>
-      <span class="step-number">04 — Finish</span>
-      <h3>Sanding &amp; finishing</h3>
-      <p>Each surface is sanded and finished by hand to protect the wood and bring the natural grain forward.</p>
-    </article>
+    <figure class="collection-tile reveal reveal-delay-1">
+      <img src="/assets/images/collection/special-occasions-1200.webp" srcset="/assets/images/collection/special-occasions-700.webp 525w, /assets/images/collection/special-occasions-1200.webp 900w" sizes="(max-width: 800px) 86vw, 27vw" width="900" height="1200" alt="Three personalised oak photo keepsakes celebrating a birth, Paris and a holiday in Tunisia" loading="lazy" decoding="async">
+      <figcaption>Special Occasions</figcaption>
+    </figure>
+    <figure class="collection-tile reveal reveal-delay-2">
+      <img src="/assets/images/collection/furniture-transformed-1200.webp" srcset="/assets/images/collection/furniture-transformed-700.webp 560w, /assets/images/collection/furniture-transformed-1200.webp 960w" sizes="(max-width: 800px) 86vw, 27vw" width="960" height="1200" alt="A restored sideboard painted deep green with natural wood drawer fronts and brass legs" loading="lazy" decoding="async">
+      <figcaption>Furniture Transformed</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -188,55 +127,6 @@
     </div>
 
     <p class="signature">Made from wood. <span>Made with purpose.</span></p>
-  </div>
-</section>
-
-<!-- CUSTOM COMMISSIONS -->
-<section class="section commissions" id="commissions">
-  <div class="commissions-bg" aria-hidden="true">
-    <img src="/assets/images/placeholders/grain-dark.jpg" alt="" loading="lazy" decoding="async">
-  </div>
-  <div class="commissions-grid">
-    <div class="reveal">
-      <div class="eyebrow">Custom commissions</div>
-      <h2 class="section-title">Have something in mind?<br>Let's make it together.</h2>
-      <p class="section-intro">
-        Alongside the collection, I make personalised and one-off pieces to order.
-        Whether it's a name on a sign, a lamp to suit a room or a gift for someone
-        special, tell me your idea and I'll let you know what's possible.
-      </p>
-      <ul class="commission-types">
-        <li>Personalised signs &amp; house names</li>
-        <li>Engraved gifts &amp; keepsakes</li>
-        <li>Lamps &amp; lighting to suit your space</li>
-        <li>Bespoke oak pieces &amp; furniture</li>
-        <li>Wedding, anniversary &amp; family gifts</li>
-        <li>Made-to-measure sizes &amp; timbers</li>
-      </ul>
-      <div class="hero-actions">
-        <a class="button" href="/?type=commission#contact" data-enquiry-type="Custom commission">Start a commission</a>
-        <a class="button button-outline" href="/?type=sign#contact" data-enquiry-type="Personalised sign">Personalise a sign</a>
-      </div>
-    </div>
-
-    <ol class="commission-steps reveal reveal-delay-1">
-      <li data-step="01">
-        <h3>Share your idea</h3>
-        <p>Send a message with what you'd like, including any wording, sizes, photos or inspiration you have.</p>
-      </li>
-      <li data-step="02">
-        <h3>Design &amp; price</h3>
-        <p>I'll come back to you to talk through the design, timber and finish, along with a price and timescale.</p>
-      </li>
-      <li data-step="03">
-        <h3>Made by hand</h3>
-        <p>Once you're happy, your piece is made by hand in the workshop, start to finish.</p>
-      </li>
-      <li data-step="04">
-        <h3>Ready for you</h3>
-        <p>When it's finished, we'll arrange how it gets to you.</p>
-      </li>
-    </ol>
   </div>
 </section>
 
@@ -317,44 +207,9 @@
 
 </main>
 
-<footer class="site-footer">
-  <div class="footer-top">
-    <div class="footer-brand">
-      <a class="logo" href="/" aria-label="Rogers Made home"><img src="/assets/images/brand/rogers-made-logo-320.webp" srcset="/assets/images/brand/rogers-made-logo-160.webp 160w, /assets/images/brand/rogers-made-logo-320.webp 320w, /assets/images/brand/rogers-made-logo-480.webp 480w, /assets/images/brand/rogers-made-logo-640.webp 640w" sizes="120px" width="160" height="157" alt="Rogers Made" loading="lazy"></a>
-      <p>Made from wood. Made with purpose. Handmade wooden pieces, designed and made by hand in a UK workshop.</p>
-      <div class="socials" data-socials></div>
-    </div>
-    <div>
-      <h4>Shop</h4>
-      <ul>
-        <li><a href="/shop">All pieces</a></li>
-        <li><a href="/shop?category=lamps">Lamps &amp; Lighting</a></li>
-        <li><a href="/shop?category=signs">Personalised Signs</a></li>
-        <li><a href="/shop?category=oak-gifts">Oak Gifts</a></li>
-        <li><a href="/shop?category=bespoke">Bespoke Pieces</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Rogers Made</h4>
-      <ul>
-        <li><a href="/#workshop">The Workshop</a></li>
-        <li><a href="/#story">Our Story</a></li>
-        <li><a href="/#commissions">Commissions</a></li>
-        <li><a href="/#contact">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <ul>
-        <li data-setting-row><span data-setting="email"></span></li>
-        <li data-setting-row><span data-setting="phone"></span></li>
-        <li data-setting-row><span data-setting="location"></span></li>
-        <li><a href="/#contact">Send an enquiry</a></li>
-      </ul>
-    </div>
-  </div>
+<footer class="site-footer site-footer-minimal">
   <div class="footer-bottom">
-    <div><strong>ROGERS MADE</strong> — Handmade in wood</div>
+    <a class="logo" href="/" aria-label="Rogers Made home"><img src="/assets/images/brand/rogers-made-logo-160.webp" srcset="/assets/images/brand/rogers-made-logo-160.webp 160w, /assets/images/brand/rogers-made-logo-320.webp 320w" sizes="64px" width="160" height="157" alt="Rogers Made" loading="lazy"></a>
     <div>&copy; <span data-year>2026</span> Rogers Made. Made with care, in my workshop.</div>
   </div>
 </footer>
