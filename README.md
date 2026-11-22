@@ -8,7 +8,7 @@ A fast, static website for Rogers Made, hosted on Netlify with no build step. Cu
 
 | Page | File | What it does |
 | --- | --- | --- |
-| Home | `index.html` | Hero, featured products, categories, workshop, story, commissions, enquiry form |
+| Home | `index.html` | Hero, collection tiles (photos in `assets/images/collection/`), story, enquiry form |
 | Shop | `shop.html` | All products, filterable by category (e.g. `/shop?category=lamps`) |
 | Product | `product.html` | One product's page, e.g. `/product?id=oak-house-number-plaque` |
 | Thank you | `thank-you.html` | Shown if the form is sent without JavaScript |
