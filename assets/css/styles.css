@@ -1643,3 +1643,218 @@ body.viewer-open { overflow: hidden; }
 @media (max-width: 340px) {
   .hero .eyebrow { font-size: 11px; letter-spacing: 2px; }
 }
+
+/* =========================================================
+   Workshop page (/workshop)
+   Scoped with the wk- prefix so no other page is affected.
+   Photos reuse the homepage hero treatment: illustrated
+   images with transparent feathered edges, the same soft
+   filter, and a gradient mask that fades them into the
+   charcoal background.
+   ========================================================= */
+
+.wk-hero {
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 70px;
+}
+.wk-hero h1 {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: clamp(36px, 5.6vw, 68px);
+  margin: 0 0 26px;
+  padding-left: .14em; /* balances the trailing letter-spacing */
+}
+
+/* Fine gold line, diamond, fine gold line */
+.wk-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.wk-ornament span {
+  width: 70px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+.wk-ornament span:last-child { background: linear-gradient(to left, transparent, var(--gold)); }
+.wk-ornament i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.wk-ornament-left { justify-content: flex-start; }
+.wk-ornament-left span:first-child { display: none; }
+.wk-ornament-left span:last-child { width: 90px; background: linear-gradient(to right, var(--gold), transparent); }
+
+/* Two columns: stages left, story right */
+.wk-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(50px, 5.5vw, 90px);
+  align-items: start;
+  padding-top: 80px;
+  padding-bottom: 110px;
+}
+.wk-col-label {
+  font-weight: 400;
+  margin-bottom: 40px;
+}
+
+/* ---------- The four stages ---------- */
+
+.wk-stages {
+  list-style: none;
+  display: grid;
+  gap: 34px;
+}
+.wk-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 3vw, 46px);
+}
+
+.wk-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  isolation: isolate;
+}
+/* A faint warm glow behind each photo, as in the hero */
+.wk-photo::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 50%, rgba(74, 52, 33, .55) 0%, transparent 62%);
+  pointer-events: none;
+}
+.wk-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .92;
+  filter: brightness(.82) saturate(.85) contrast(1.05);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.wk-stage-text {
+  position: relative;
+  padding: 6px 0 6px 28px;
+  border-left: 1px solid rgba(196, 154, 108, .28);
+}
+.wk-stage-text::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 12px;
+  width: 7px;
+  height: 7px;
+  background: var(--bg);
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.wk-num {
+  display: block;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 4px;
+  margin-bottom: 14px;
+}
+.wk-stage-text h3 {
+  font-size: clamp(21px, 1.8vw, 26px);
+  font-weight: 400;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.wk-stage-text p {
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+/* ---------- The story ---------- */
+
+.wk-story {
+  position: sticky;
+  top: 150px;
+  padding-left: clamp(30px, 3.5vw, 56px);
+  border-left: 1px solid var(--line-soft);
+}
+.wk-story p {
+  color: #b9b3aa;
+  line-height: 1.9;
+  margin: 0 0 22px;
+}
+.wk-story .wk-lead {
+  color: var(--text-soft);
+  font-size: 19px;
+  line-height: 1.75;
+}
+.wk-story .wk-ornament { margin: 40px 0 22px; }
+.wk-story .wk-script {
+  font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", "Lucida Handwriting", cursive;
+  font-style: italic;
+  font-size: clamp(28px, 2.7vw, 38px);
+  line-height: 1.35;
+  color: var(--gold-light);
+  margin-bottom: 38px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .wk-layout { grid-template-columns: 1fr; gap: 70px; }
+  .wk-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .wk-story {
+    position: static;
+    max-width: 680px;
+    padding-left: 0;
+    border-left: 0;
+    padding-top: 50px;
+    border-top: 1px solid var(--line-soft);
+  }
+}
+
+@media (max-width: 800px) {
+  .wk-hero { padding-top: 60px; padding-bottom: 50px; }
+  .wk-layout { padding-top: 55px; padding-bottom: 80px; }
+  .wk-story .wk-lead { font-size: 17px; }
+}
+
+@media (max-width: 600px) {
+  .wk-stages { gap: 46px; }
+  .wk-stage { grid-template-columns: 1fr; gap: 6px; }
+  .wk-photo { width: 100%; max-width: 440px; margin: 0 auto; }
+  /* A slightly gentler fade keeps more of the photo on narrow screens */
+  .wk-photo img {
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, #000 10%, #000 86%, transparent 100%);
+    mask-image:
+      linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, #000 10%, #000 86%, transparent 100%);
+  }
+  .wk-hero h1 { font-size: clamp(26px, 8.4vw, 40px); letter-spacing: .1em; padding-left: .1em; }
+  /* Keep the tagline on one line on phones, as on the homepage hero */
+  .wk-hero .eyebrow { letter-spacing: 3px; }
+}
+
+@media (max-width: 380px) {
+  .wk-hero .eyebrow { letter-spacing: 2.2px; }
+}
+
+@media (max-width: 340px) {
+  .wk-hero .eyebrow { font-size: 11px; letter-spacing: 2px; }
+}
