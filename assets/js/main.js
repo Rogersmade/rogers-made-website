@@ -15,6 +15,7 @@
   // Photos can be listed as "/path.jpg" or { src: "/path.png", fit: "contain" }.
   // "contain" photos (e.g. charts) are shown in full instead of cropped.
   var CONTAIN = {};
+  var MAX_PHOTOS = 5;
   PRODUCTS.forEach(function (p) {
     if (!Array.isArray(p.images)) return;
     p.images = p.images.map(function (im) {
@@ -23,8 +24,16 @@
         return im.src || "";
       }
       return im;
-    }).filter(Boolean);
+    }).filter(Boolean).slice(0, MAX_PHOTOS);
   });
+
+  // Links to products that were renamed keep working
+  var OLD_IDS = {
+    "oak-house-number-plaque": "personalised-oak-house-sign",
+    "christmas-tree-of-life-light": "christmas-led-lamp",
+    "christmas-moon-sleigh-light": "christmas-led-lamp",
+    "christmas-star-tree-light": "christmas-led-lamp"
+  };
 
   /* ---------- Helpers ---------- */
 
@@ -70,14 +79,26 @@
   }
 
   function productById(id) {
+    if (OLD_IDS[id]) id = OLD_IDS[id];
     for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].id === id) return PRODUCTS[i];
     return null;
   }
 
-  // A product counts as sold if it has sold: true
-  // (available: false from older entries still works too).
+  // How many can be bought. Products without a stock number
+  // are treated as made to order (no limit shown).
+  function stockOf(p) {
+    if (p.sold === true || p.available === false) return 0;
+    var n = Number(p.stock);
+    return p.stock === undefined || p.stock === null || p.stock === "" || isNaN(n) ? 99 : Math.max(0, Math.floor(n));
+  }
+
   function isSold(p) {
-    return p.sold === true || p.available === false;
+    return stockOf(p) <= 0;
+  }
+
+  function deliveryOf(p) {
+    var n = Number(p.delivery);
+    return isNaN(n) || n < 0 ? 0 : n;
   }
 
   function hasPrice(p) {
@@ -90,15 +111,30 @@
     return (SETTINGS.currency || "£") + fixed;
   }
 
+  // Always two decimal places, e.g. £4.95 or £25.00 (basket & checkout)
+  function money(value) {
+    return (SETTINGS.currency || "£") + (Math.round(Number(value) * 100) / 100).toFixed(2);
+  }
+
   function priceHtml(p, cls) {
-    if (isSold(p)) {
-      return '<div class="' + cls + ' on-request"><small>Availability</small>Sold — enquire for similar</div>';
-    }
     if (!hasPrice(p)) {
       return '<div class="' + cls + ' on-request"><small>Price</small>Price on request</div>';
     }
     return '<div class="' + cls + '"><small>' + (p.priceFrom ? "From" : "Price") + "</small>" +
       formatMoney(p.price) + "</div>";
+  }
+
+  function deliveryText(p) {
+    var d = deliveryOf(p);
+    return d === 0 ? "Free" : money(d);
+  }
+
+  function stockHtml(p) {
+    var n = stockOf(p);
+    if (n <= 0) return '<p class="stock-status is-out"><i aria-hidden="true"></i>Sold out</p>';
+    if (n >= 99) return '<p class="stock-status"><i aria-hidden="true"></i>Made to order</p>';
+    if (n === 1) return '<p class="stock-status is-low"><i aria-hidden="true"></i>In stock — only 1 available</p>';
+    return '<p class="stock-status"><i aria-hidden="true"></i>In stock — ' + n + " available</p>";
   }
 
   function productUrl(p) { return "/product?id=" + encodeURIComponent(p.id); }
@@ -108,26 +144,22 @@
     var cat = categoryById(p.category);
     var image = (p.images && p.images[0]) || "";
     var sold = isSold(p);
-    var badge = sold ? "Sold" : p.badge;
+    var badge = sold ? "Sold out" : p.badge;
     var delay = " reveal-delay-" + (index % 3);
     return '' +
       '<article class="product reveal' + delay + (sold ? " is-sold" : "") + '">' +
-        '<a class="product-image" href="' + productUrl(p) + '" aria-label="View ' + esc(p.name) + (sold ? " (sold)" : "") + '">' +
+        '<a class="product-image" href="' + productUrl(p) + '" tabindex="-1" aria-hidden="true">' +
           (badge ? '<span class="product-badge' + (sold ? " sold" : "") + '">' + esc(badge) + "</span>" : "") +
           (image
-            ? picture(image, p.name, [480, 720, 960], "(max-width: 800px) 92vw, (max-width: 1100px) 45vw, 30vw")
+            ? picture(image, "", [480, 720, 960], "(max-width: 800px) 92vw, (max-width: 1100px) 45vw, 30vw")
             : "PHOTO COMING SOON") +
         "</a>" +
         '<div class="product-info">' +
           (cat ? '<div class="product-category">' + esc(cat.name) + "</div>" : "") +
           '<h3><a href="' + productUrl(p) + '">' + esc(p.name) + "</a></h3>" +
-          "<p>" + esc(p.summary) + "</p>" +
           '<div class="product-meta">' +
             priceHtml(p, "product-price") +
-            '<div class="product-actions">' +
-              '<a class="button button-outline button-small" href="' + productUrl(p) + '">View</a>' +
-              '<a class="button button-small" href="' + enquireUrl(p) + '" data-enquire="' + esc(p.id) + '">Enquire</a>' +
-            "</div>" +
+            '<a class="button button-outline button-small" href="' + productUrl(p) + '" aria-label="View product: ' + esc(p.name) + '">View product</a>' +
           "</div>" +
         "</div>" +
       "</article>";
@@ -293,9 +325,12 @@
     var defaultTitle = title ? title.innerHTML : "";
     var defaultIntro = intro ? intro.textContent : "";
 
+    // Categories with no products are left out of the filter bar
+    var startCat = new URLSearchParams(location.search).get("category");
     var options = [{ id: "all", name: "All pieces" }].concat(CATEGORIES);
     filters.innerHTML = options.map(function (c) {
       var count = c.id === "all" ? PRODUCTS.length : PRODUCTS.filter(function (p) { return p.category === c.id; }).length;
+      if (!count && c.id !== startCat) return "";
       return '<button type="button" class="filter" data-filter="' + esc(c.id) + '" aria-pressed="false">' +
         esc(c.name) + '<span class="count">' + count + "</span></button>";
     }).join("");
@@ -469,6 +504,93 @@
     box.querySelector(".viewer-close").focus();
   }
 
+  /* ---------- Basket (saved in this browser) ---------- */
+
+  var BASKET_KEY = "rogers-made-basket";
+
+  // Each line: { key, id, qty, note }. Lines for the same product
+  // with different personalisation are kept separate.
+  function readBasket() {
+    var lines = [];
+    try { lines = JSON.parse(localStorage.getItem(BASKET_KEY)) || []; } catch (e) { lines = []; }
+    if (!Array.isArray(lines)) lines = [];
+    var used = {};
+    return lines.filter(function (l) {
+      var p = l && productById(l.id);
+      if (!p || isSold(p) || !hasPrice(p)) return false;
+      l.id = p.id;
+      l.note = String(l.note || "").slice(0, 500);
+      var left = stockOf(p) - (used[p.id] || 0);
+      l.qty = Math.min(Math.max(1, Math.floor(Number(l.qty)) || 1), left);
+      if (l.qty < 1) return false;
+      used[p.id] = (used[p.id] || 0) + l.qty;
+      if (!l.key) l.key = p.id + "-" + Math.random().toString(36).slice(2, 8);
+      return true;
+    });
+  }
+
+  function saveBasket(lines) {
+    try { localStorage.setItem(BASKET_KEY, JSON.stringify(lines)); } catch (e) { /* storage unavailable */ }
+    updateBasketCount();
+  }
+
+  function qtyInBasket(lines, id, exceptKey) {
+    return lines.reduce(function (n, l) { return n + (l.id === id && l.key !== exceptKey ? l.qty : 0); }, 0);
+  }
+
+  function addToBasket(p, qty, note) {
+    var lines = readBasket();
+    note = String(note || "").trim();
+    var room = stockOf(p) - qtyInBasket(lines, p.id);
+    qty = Math.min(qty, room);
+    if (qty < 1) return 0;
+    var same = null;
+    lines.forEach(function (l) { if (l.id === p.id && l.note === note) same = l; });
+    if (same) same.qty += qty;
+    else lines.push({ key: p.id + "-" + Date.now().toString(36), id: p.id, qty: qty, note: note });
+    saveBasket(lines);
+    return qty;
+  }
+
+  // Totals. One delivery charge per order: the highest charge
+  // of the products in the basket.
+  function basketTotals(lines) {
+    var items = 0, subtotal = 0, delivery = 0, notes = [];
+    lines.forEach(function (l) {
+      var p = productById(l.id);
+      items += l.qty;
+      subtotal += Number(p.price) * l.qty;
+      delivery = Math.max(delivery, deliveryOf(p));
+      if (p.deliveryNote && notes.indexOf(p.deliveryNote) === -1) notes.push(p.deliveryNote);
+    });
+    subtotal = Math.round(subtotal * 100) / 100;
+    return { items: items, subtotal: subtotal, delivery: delivery, total: Math.round((subtotal + delivery) * 100) / 100, notes: notes };
+  }
+
+  function updateBasketCount() {
+    var count = basketTotals(readBasket()).items;
+    document.querySelectorAll("[data-basket-count]").forEach(function (el) {
+      el.textContent = count;
+      el.hidden = count === 0;
+    });
+    document.querySelectorAll("[data-basket-link]").forEach(function (el) {
+      el.setAttribute("aria-label", "Basket, " + count + (count === 1 ? " item" : " items"));
+    });
+  }
+
+  var MINUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 12h12"/></svg>';
+  var PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg>';
+
+  function qtyHtml(id, value, max, label, key) {
+    var k = key ? ' data-qty-key="' + esc(key) + '"' : "";
+    return '<div class="qty">' +
+      '<button type="button" data-step="-1"' + k + ' aria-label="Decrease quantity' + (label ? " of " + esc(label) : "") + '"' + (value <= 1 ? " disabled" : "") + ">" + MINUS + "</button>" +
+      '<input type="number" inputmode="numeric" id="' + esc(id) + '" name="quantity" min="1" max="' + max + '" value="' + value + '"' + k +
+        (label ? ' aria-label="Quantity of ' + esc(label) + '"' : "") + ">" +
+      '<button type="button" data-step="1"' + k + ' aria-label="Increase quantity' + (label ? " of " + esc(label) : "") + '"' + (value >= max ? " disabled" : "") + ">" + PLUS + "</button>" +
+    "</div>";
+  }
+
   /* ---------- Product page ---------- */
 
   function initProduct() {
@@ -489,6 +611,8 @@
     var images = (p.images && p.images.length) ? p.images : [""];
     var paragraphs = Array.isArray(p.description) ? p.description : [p.description || p.summary];
     var multi = images.length > 1;
+    var sold = isSold(p);
+    var canBuy = !sold && hasPrice(p);
 
     function photoAlt(i) {
       return multi ? p.name + " — photo " + (i + 1) + " of " + images.length : p.name;
@@ -507,11 +631,33 @@
     var details = (p.details || []).map(function (d) {
       return "<li><span>" + esc(d[0]) + "</span><span>" + esc(d[1]) + "</span></li>";
     }).join("");
+    var features = (p.features || []).map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("");
+
+    var buyForm = canBuy
+      ? '<form class="buy-form" data-buy-form novalidate>' +
+          (p.personalisation
+            ? '<div class="field">' +
+                '<label for="personalisation">Personalisation</label>' +
+                '<p class="field-hint" id="personalisation-hint">' + esc(p.personalisation) + "</p>" +
+                '<textarea id="personalisation" name="personalisation" rows="4" maxlength="500" required aria-describedby="personalisation-hint personalisation-error" placeholder="Type your names, wording or instructions here"></textarea>' +
+                '<div class="field-error" id="personalisation-error">Please add your personalisation details so I know what to make.</div>' +
+              "</div>"
+            : "") +
+          '<div class="buy-row">' +
+            '<div class="field qty-field"><label for="quantity">Quantity</label>' + qtyHtml("quantity", 1, stockOf(p)) + "</div>" +
+            '<button class="button buy-button" type="submit">Add to basket</button>' +
+          "</div>" +
+          '<div class="buy-status" role="status" aria-live="polite" data-buy-status></div>' +
+        "</form>"
+      : '<div class="detail-actions">' +
+          '<a class="button" href="' + enquireUrl(p) + '">Ask about a similar piece</a>' +
+          '<a class="button button-outline" href="/shop">Back to shop</a>' +
+        "</div>";
 
     root.innerHTML =
       '<div class="product-detail">' +
         '<div class="gallery">' +
-          (isSold(p) ? '<span class="product-badge sold detail-sold">Sold</span>' : "") +
+          (sold ? '<span class="product-badge sold detail-sold">Sold out</span>' : "") +
           '<div class="gallery-main" data-gallery-main>' +
             (images[0]
               ? '<button type="button" class="gallery-zoom" data-gallery-open aria-label="View larger photo">' +
@@ -535,18 +681,22 @@
         '<div class="detail-info">' +
           (cat ? '<div class="eyebrow">' + esc(cat.name) + "</div>" : "") +
           "<h1>" + esc(p.name) + "</h1>" +
-          priceHtml(p, "detail-price") +
-          '<div class="detail-description">' + paragraphs.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + "</div>" +
-          (details ? '<ul class="detail-list">' + details + "</ul>" : "") +
-          '<div class="detail-actions">' +
-            '<a class="button" href="' + enquireUrl(p) + '">' + (isSold(p) ? "Ask about a similar piece" : "Enquire about this piece") + "</a>" +
-            '<a class="button button-outline" href="/shop' + (cat ? "?category=" + esc(cat.id) : "") + '">Back to shop</a>' +
+          '<div class="detail-pricing">' +
+            priceHtml(p, "detail-price") +
+            '<div class="detail-price detail-delivery"><small>Delivery</small>' + deliveryText(p) +
+              '<span>' + esc(p.deliveryNote || "UK delivery") + "</span></div>" +
           "</div>" +
-          '<p class="detail-note">Every piece is made by hand, so grain, colour and small details will vary. Send an enquiry and I\'ll confirm price, timings and delivery or collection with you directly.</p>' +
+          stockHtml(p) +
+          buyForm +
+          '<div class="detail-description">' + paragraphs.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + "</div>" +
+          (features ? '<h2 class="detail-subhead">' + esc(p.featuresTitle || "Features") + '</h2><ul class="detail-features">' + features + "</ul>" : "") +
+          (details ? '<ul class="detail-list">' + details + "</ul>" : "") +
+          '<p class="detail-note">Every piece is made by hand, so grain, colour and small details will vary. One delivery charge per order: if you buy more than one piece, you pay the highest delivery charge in your basket.</p>' +
         "</div>" +
       "</div>";
 
     initGallery(root, images, photoAlt);
+    if (canBuy) initBuyForm(root.querySelector("[data-buy-form]"), p);
 
     var related = document.querySelector("[data-related]");
     if (related) {
@@ -562,6 +712,289 @@
         related.hidden = true;
       }
     }
+  }
+
+  // Keeps a quantity box between 1 and its max, and the -/+ buttons in step
+  function wireQty(wrap, onChange) {
+    var input = wrap.querySelector("input");
+    var minus = wrap.querySelector('[data-step="-1"]');
+    var plus = wrap.querySelector('[data-step="1"]');
+    function set(v, fire) {
+      var max = Math.max(1, Number(input.max) || 1);
+      v = Math.min(max, Math.max(1, Math.floor(Number(v)) || 1));
+      input.value = v;
+      minus.disabled = v <= 1;
+      plus.disabled = v >= max;
+      if (fire && onChange) onChange(v);
+    }
+    minus.addEventListener("click", function () { set(Number(input.value) - 1, true); });
+    plus.addEventListener("click", function () { set(Number(input.value) + 1, true); });
+    input.addEventListener("change", function () { set(input.value, true); });
+    return set;
+  }
+
+  function initBuyForm(form, p) {
+    var status = form.querySelector("[data-buy-status]");
+    var note = form.querySelector('[name="personalisation"]');
+    var qtyInput = form.querySelector('[name="quantity"]');
+    var button = form.querySelector(".buy-button");
+    var setQty = wireQty(form.querySelector(".qty"));
+
+    function refresh() {
+      var room = stockOf(p) - qtyInBasket(readBasket(), p.id);
+      qtyInput.max = Math.max(1, room);
+      setQty(qtyInput.value);
+      var full = room < 1;
+      button.disabled = full;
+      qtyInput.disabled = full;
+      return room;
+    }
+
+    if (refresh() < 1) {
+      status.innerHTML = '<p>All available stock of this piece is already in your basket. <a href="/basket">View basket</a></p>';
+    }
+
+    if (note) {
+      note.addEventListener("input", function () {
+        if (note.value.trim()) note.closest(".field").classList.remove("invalid");
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (note && !note.value.trim()) {
+        note.closest(".field").classList.add("invalid");
+        note.setAttribute("aria-invalid", "true");
+        note.focus();
+        return;
+      }
+      if (note) note.setAttribute("aria-invalid", "false");
+      var added = addToBasket(p, Number(qtyInput.value) || 1, note ? note.value : "");
+      if (!added) {
+        status.innerHTML = "<p>Sorry, there's no more stock of this piece available.</p>";
+        refresh();
+        return;
+      }
+      status.innerHTML = '<p class="buy-added"><span class="tick" aria-hidden="true">✓</span>' +
+        (added === 1 ? "Added to your basket." : added + " added to your basket.") +
+        ' <a href="/basket">View basket &amp; checkout</a></p>';
+      if (note) note.value = "";
+      qtyInput.value = 1;
+      refresh();
+    });
+  }
+
+  /* ---------- Basket page ---------- */
+
+  function lineHtml(l, lines, editable) {
+    var p = productById(l.id);
+    var max = stockOf(p) - qtyInBasket(lines, p.id, l.key);
+    var image = (p.images && p.images[0]) || "";
+    return '<article class="basket-item">' +
+      '<a class="basket-thumb" href="' + productUrl(p) + '" tabindex="-1" aria-hidden="true">' +
+        (image ? picture(image, "", [200, 400], "120px") : "") + "</a>" +
+      '<div class="basket-main">' +
+        '<h3><a href="' + productUrl(p) + '">' + esc(p.name) + "</a></h3>" +
+        '<div class="basket-unit">' + money(p.price) + (editable ? " each" : " each × " + l.qty) + "</div>" +
+        (l.note
+          ? '<div class="basket-note"><small>Personalisation</small><p>' + esc(l.note) + "</p></div>"
+          : "") +
+        (editable ? '<button type="button" class="basket-remove" data-remove="' + esc(l.key) + '" aria-label="Remove ' + esc(p.name) + ' from basket">Remove</button>' : "") +
+      "</div>" +
+      (editable ? '<div class="basket-qty">' + qtyHtml("qty-" + l.key, l.qty, Math.max(1, max), p.name, l.key) + "</div>" : "") +
+      '<div class="basket-line">' + money(Number(p.price) * l.qty) + "</div>" +
+    "</article>";
+  }
+
+  function summaryRowsHtml(t) {
+    return '<dl class="summary-rows">' +
+      "<div><dt>Subtotal <span>(" + t.items + (t.items === 1 ? " item" : " items") + ")</span></dt><dd>" + money(t.subtotal) + "</dd></div>" +
+      "<div><dt>Delivery</dt><dd>" + (t.delivery === 0 ? "Free" : money(t.delivery)) + "</dd></div>" +
+      '<div class="summary-total"><dt>Total</dt><dd>' + money(t.total) + "</dd></div>" +
+    "</dl>" +
+    (t.notes.length ? t.notes.map(function (n) { return '<p class="summary-note">' + esc(n) + "</p>"; }).join("") : "");
+  }
+
+  function emptyBasketHtml() {
+    return '<div class="empty-state"><h3>Your basket is empty</h3>' +
+      "<p>Have a look through the shop and add something made by hand.</p>" +
+      '<a class="button" href="/shop">Browse the shop</a></div>';
+  }
+
+  function initBasketPage() {
+    var root = document.querySelector("[data-basket]");
+    if (!root) return;
+
+    function render(focusSel) {
+      var lines = readBasket();
+      saveBasket(lines);
+      if (!lines.length) { root.innerHTML = emptyBasketHtml(); return; }
+      var t = basketTotals(lines);
+      root.innerHTML =
+        '<div class="basket-layout">' +
+          '<div class="basket-items">' +
+            '<div class="basket-head" aria-hidden="true"><span>Product</span><span>Quantity</span><span>Total</span></div>' +
+            lines.map(function (l) { return lineHtml(l, lines, true); }).join("") +
+            '<a class="text-link basket-continue" href="/shop">Continue shopping</a>' +
+          "</div>" +
+          '<aside class="basket-summary" aria-label="Order summary">' +
+            "<h2>Order summary</h2>" +
+            summaryRowsHtml(t) +
+            '<a class="button summary-button" href="/checkout">Continue to checkout</a>' +
+            '<p class="summary-small">One delivery charge per order: the highest delivery charge of the items in your basket.</p>' +
+          "</aside>" +
+        "</div>";
+
+      root.querySelectorAll(".basket-qty").forEach(function (wrap) {
+        var key = wrap.querySelector("input").getAttribute("data-qty-key");
+        wireQty(wrap, function (v) {
+          var all = readBasket();
+          all.forEach(function (l) { if (l.key === key) l.qty = v; });
+          saveBasket(all);
+          var step = document.activeElement && document.activeElement.getAttribute("data-step");
+          render(step
+            ? 'button[data-qty-key="' + key + '"][data-step="' + step + '"]'
+            : 'input[data-qty-key="' + key + '"]');
+        });
+      });
+
+      if (focusSel) {
+        var el = root.querySelector(focusSel);
+        if (el && el.disabled) el = el.parentNode.querySelector("input");
+        if (el) el.focus();
+      }
+    }
+
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-remove]");
+      if (!btn) return;
+      var key = btn.getAttribute("data-remove");
+      saveBasket(readBasket().filter(function (l) { return l.key !== key; }));
+      render();
+      var next = root.querySelector(".basket-remove") || root.querySelector(".button");
+      if (next) next.focus();
+    });
+
+    window.addEventListener("storage", function (e) { if (e.key === BASKET_KEY) render(); });
+    render();
+  }
+
+  /* ---------- Checkout page ----------
+     Payment isn't connected yet. The form sends an order request
+     (through Netlify Forms) and clearly tells the customer that
+     nothing has been paid. Card payment (Stripe) can be added in
+     the payment section later. */
+
+  function initCheckout() {
+    var form = document.querySelector("form[data-checkout-form]");
+    if (!form) return;
+
+    var layout = document.querySelector("[data-checkout-layout]");
+    var summary = document.querySelector("[data-checkout-summary]");
+    var empty = document.querySelector("[data-checkout-empty]");
+    var success = document.querySelector("[data-order-success]");
+    var status = form.querySelector("[data-form-status]");
+    var submit = form.querySelector('[type="submit"]');
+
+    function orderText(lines, t) {
+      return lines.map(function (l) {
+        var p = productById(l.id);
+        return l.qty + " x " + p.name + " (" + money(p.price) + " each) = " + money(Number(p.price) * l.qty) +
+          (l.note ? "\n   Personalisation: " + l.note.replace(/\s*\n\s*/g, " / ") : "");
+      }).join("\n") +
+      "\n\nSubtotal: " + money(t.subtotal) +
+      "\nDelivery: " + (t.delivery === 0 ? "Free" : money(t.delivery)) +
+      (t.notes.length ? " (" + t.notes.join("; ") + ")" : "") +
+      "\nTotal payable: " + money(t.total);
+    }
+
+    function render() {
+      var lines = readBasket();
+      if (!lines.length) {
+        layout.hidden = true;
+        empty.hidden = false;
+        empty.innerHTML = emptyBasketHtml();
+        return null;
+      }
+      var t = basketTotals(lines);
+      summary.innerHTML =
+        '<div class="summary-headline"><h2>Order summary</h2><a class="text-link" href="/basket">Edit basket</a></div>' +
+        '<div class="checkout-items">' + lines.map(function (l) { return lineHtml(l, lines, false); }).join("") + "</div>" +
+        summaryRowsHtml(t).replace("<dt>Total</dt>", "<dt>Total payable</dt>");
+      submit.textContent = "Send order request — " + money(t.total);
+      return { lines: lines, totals: t };
+    }
+
+    function validateField(field) {
+      var wrap = field.closest(".field");
+      if (!wrap) return true;
+      var ok = field.checkValidity() && (!field.required || field.value.trim() !== "");
+      wrap.classList.toggle("invalid", !ok);
+      field.setAttribute("aria-invalid", ok ? "false" : "true");
+      return ok;
+    }
+
+    form.querySelectorAll("input, textarea").forEach(function (field) {
+      field.addEventListener("blur", function () { if (field.value) validateField(field); });
+      field.addEventListener("input", function () { if (field.closest(".field.invalid")) validateField(field); });
+    });
+
+    render();
+    window.addEventListener("storage", function (e) { if (e.key === BASKET_KEY) render(); });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      status.className = "form-status";
+      status.textContent = "";
+
+      var firstInvalid = null;
+      form.querySelectorAll("[required]").forEach(function (f) {
+        if (!validateField(f) && !firstInvalid) firstInvalid = f;
+      });
+      if (firstInvalid) { firstInvalid.focus(); return; }
+
+      var order = render();
+      if (!order) return;
+
+      var d = new Date();
+      var ref = "RM-" + String(d.getFullYear()).slice(2) + ("0" + (d.getMonth() + 1)).slice(-2) + ("0" + d.getDate()).slice(-2) +
+        "-" + Math.floor(1000 + Math.random() * 9000);
+      form.querySelector('[name="order"]').value = orderText(order.lines, order.totals);
+      form.querySelector('[name="order-reference"]').value = ref;
+      form.querySelector('[name="subtotal"]').value = money(order.totals.subtotal);
+      form.querySelector('[name="delivery"]').value = order.totals.delivery === 0 ? "Free" : money(order.totals.delivery);
+      form.querySelector('[name="total"]').value = money(order.totals.total);
+
+      submit.disabled = true;
+      var label = submit.textContent;
+      submit.textContent = "Sending…";
+
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString()
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("Request failed with status " + res.status);
+          var nameField = form.querySelector('[name="name"]');
+          success.querySelector("[data-order-ref]").textContent = ref;
+          success.querySelector("[data-order-name]").textContent = nameField.value.trim().split(" ")[0];
+          success.querySelector("[data-order-email]").textContent = form.querySelector('[name="email"]').value.trim();
+          success.querySelector("[data-order-total]").textContent = money(order.totals.total);
+          saveBasket([]);
+          layout.hidden = true;
+          success.hidden = false;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          success.focus({ preventScroll: true });
+        })
+        .catch(function () {
+          status.className = "form-status error";
+          status.textContent = "Sorry, your order request couldn't be sent just now. Your basket is saved, so please try again in a moment" +
+            (SETTINGS.email ? ", or email " + SETTINGS.email + " directly." : ".");
+          submit.disabled = false;
+          submit.textContent = label;
+        });
+    });
   }
 
   /* ---------- Enquiry form ---------- */
@@ -695,6 +1128,9 @@
     initCategories();
     initShop();
     initProduct();
+    initBasketPage();
+    initCheckout();
+    updateBasketCount();
     initEnquiryForm();
     observeReveals();
   }
