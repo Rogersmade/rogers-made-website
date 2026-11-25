@@ -1858,3 +1858,274 @@ body.viewer-open { overflow: hidden; }
 @media (max-width: 340px) {
   .wk-hero .eyebrow { font-size: 11px; letter-spacing: 2px; }
 }
+
+/* =========================================================
+   My Story page (/my-story)
+   Scoped with the ms- prefix so no other page is affected.
+   Photos use the same feathered, faded edges as the homepage
+   hero and Workshop page, with a lighter touch on the filter
+   so these real photographs stay natural.
+   ========================================================= */
+
+.ms-block,
+.ms-strip-wrap,
+.ms-chapter { overflow-x: clip; }
+
+.ms-block {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+.ms-intro { padding-top: 90px; }
+
+/* Text beside photographs */
+.ms-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(50px, 6vw, 100px);
+  align-items: center;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section.ms-split {
+  max-width: none;
+  padding-left: max(10%, calc((100% - 1180px) / 2));
+  padding-right: max(10%, calc((100% - 1180px) / 2));
+}
+
+.ms-text { max-width: 540px; }
+.ms-text .section-title { margin-bottom: 30px; }
+.ms-text p {
+  color: #b9b3aa;
+  line-height: 1.9;
+  margin: 0 0 22px;
+}
+.ms-text p:last-child { margin-bottom: 0; }
+.ms-text .ms-lead {
+  color: var(--text-soft);
+  font-size: 19px;
+  line-height: 1.75;
+}
+
+.ms-script,
+.ms-text .ms-script {
+  font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", "Lucida Handwriting", cursive;
+  font-style: italic;
+  font-size: clamp(28px, 2.7vw, 38px);
+  line-height: 1.35;
+  color: var(--gold-light);
+}
+
+.ms-caption {
+  grid-column: 1 / -1;
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ms-caption-center { text-align: center; }
+
+/* ---------- Photographs ---------- */
+
+.ms-photo {
+  position: relative;
+  margin: 0;
+  isolation: isolate;
+}
+/* A faint warm glow behind each photo, as in the hero */
+.ms-photo::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 50%, rgba(74, 52, 33, .5) 0%, transparent 62%);
+  pointer-events: none;
+}
+.ms-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .95;
+  filter: brightness(.9) saturate(.94) contrast(1.03);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  mask-composite: intersect;
+}
+/* Wide photos need a narrower fade at the sides */
+.ms-photo-wide img,
+.ms-photo-landscape img {
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+}
+
+/* Two portrait photos, gently staggered */
+.ms-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  width: 100%;
+  max-width: 600px;
+  justify-self: center;
+}
+.ms-pair .ms-photo { aspect-ratio: 4 / 7; }
+.ms-pair .ms-photo:nth-of-type(2) { margin-top: 80px; }
+.ms-pair .ms-caption { text-align: right; }
+
+/* The person behind the bench */
+.ms-person {
+  position: relative;
+}
+.ms-person::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at 70% 50%, rgba(74, 52, 33, .35) 0%, transparent 55%);
+  pointer-events: none;
+}
+.ms-person .wk-ornament { margin: 6px 0 26px; }
+.ms-person .ms-text .ms-script { margin: 0; font-size: clamp(30px, 3.3vw, 46px); }
+.ms-pair-person .ms-photo:first-of-type { aspect-ratio: 3 / 5; }
+.ms-pair-person .ms-photo:first-of-type img { object-position: center 20%; }
+.ms-pair-person .ms-photo:nth-of-type(2) { aspect-ratio: 9 / 10; margin-top: 150px; }
+
+/* Wide strip of garden projects */
+.ms-strip-wrap {
+  padding: 10px 10% 40px;
+}
+.ms-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 794fr) minmax(0, 406fr);
+  gap: 10px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.ms-strip .ms-photo:first-child { aspect-ratio: 794 / 330; }
+.ms-strip .ms-photo:last-child { aspect-ratio: 406 / 330; }
+.ms-strip-wrap .ms-caption { margin-top: 14px; }
+
+/* A landscape photo above a smaller one */
+.ms-stack {
+  display: grid;
+  width: 100%;
+  max-width: 580px;
+  justify-self: center;
+}
+.ms-stack .ms-photo-landscape { aspect-ratio: 600 / 350; }
+.ms-stack .ms-photo-square {
+  aspect-ratio: 294 / 326;
+  width: 52%;
+  justify-self: end;
+  margin-top: 6px;
+}
+.ms-stack .ms-caption { margin-top: 12px; }
+
+/* ---------- A new chapter ---------- */
+
+.ms-chapter { padding-top: 90px; }
+.ms-chapter-head {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 70px;
+}
+.ms-chapter-head .section-title { margin-bottom: 24px; }
+.ms-chapter-row + .ms-chapter-row { margin-top: 70px; }
+.ms-photo-portrait {
+  aspect-ratio: 292 / 518;
+  width: 100%;
+  max-width: 330px;
+  justify-self: center;
+}
+.ms-chapter .ms-photo-landscape {
+  aspect-ratio: 600 / 318;
+  width: 100%;
+  max-width: 600px;
+  justify-self: center;
+}
+
+.ms-closing {
+  max-width: 760px;
+  margin: 100px auto 0;
+  text-align: center;
+}
+
+/* The Wiltshire flag, feathered softly into the background */
+.ms-flag {
+  width: 300px;
+  max-width: 70vw;
+  margin: 46px auto 0;
+}
+.ms-flag img {
+  width: 100%;
+  height: auto;
+  opacity: .88;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 9%, #000 93%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 9%, #000 93%, transparent 100%);
+  mask-composite: intersect;
+}
+.ms-flag figcaption {
+  margin-top: 16px;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.ms-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px 38px;
+  margin-top: 50px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .ms-split { gap: 50px; }
+  .ms-text .ms-lead { font-size: 18px; }
+}
+
+@media (max-width: 800px) {
+  .ms-block { padding-top: 45px; padding-bottom: 45px; }
+  .ms-intro { padding-top: 60px; }
+  .ms-split { grid-template-columns: 1fr; gap: 40px; }
+  .section.ms-split { padding-left: 7%; padding-right: 7%; }
+  .ms-split-reverse .ms-text { order: -1; }
+  .ms-text { max-width: 620px; }
+  .ms-text .ms-lead { font-size: 17px; }
+  .ms-pair { max-width: 460px; }
+  .ms-pair-person .ms-photo:nth-of-type(2) { margin-top: 110px; }
+  .ms-stack { max-width: 520px; }
+  .ms-strip-wrap { padding: 10px 7% 30px; }
+  .ms-strip { grid-template-columns: 1fr; gap: 4px; max-width: 560px; }
+  .ms-chapter { padding-top: 60px; }
+  .ms-chapter-head { margin-bottom: 45px; }
+  .ms-chapter-row + .ms-chapter-row { margin-top: 50px; }
+  .ms-closing { margin-top: 70px; }
+}
+
+@media (max-width: 520px) {
+  .ms-pair { gap: 12px; }
+  .ms-pair .ms-photo:nth-of-type(2) { margin-top: 50px; }
+  .ms-pair-person .ms-photo:nth-of-type(2) { margin-top: 90px; }
+  .ms-caption { letter-spacing: 2.4px; }
+  .ms-photo-portrait { max-width: 280px; }
+}
