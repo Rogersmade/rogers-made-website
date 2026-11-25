@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | Rogers Made</title>
+<meta name="description" content="Checkout for your Rogers Made order.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#11110f">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/assets/images/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header has-basket">
+  <a class="logo" href="/" aria-label="Rogers Made home"><img src="/assets/images/brand/rogers-made-logo-320.webp" srcset="/assets/images/brand/rogers-made-logo-160.webp 160w, /assets/images/brand/rogers-made-logo-320.webp 320w, /assets/images/brand/rogers-made-logo-480.webp 480w, /assets/images/brand/rogers-made-logo-640.webp 640w" sizes="(max-width: 800px) 128px, 170px" width="160" height="157" alt="Rogers Made"></a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span></button>
+  <nav class="site-nav" id="site-nav" aria-label="Main">
+    <a href="/">Home</a>
+    <a href="/shop">Shop</a>
+    <a href="/workshop">Workshop</a>
+    <a href="/my-story">My Story</a>
+    <a href="/#commissions">Commissions</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <a class="header-basket" href="/basket" data-basket-link aria-label="Basket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></svg><span class="header-basket-label">Basket</span><span class="header-basket-count" data-basket-count hidden>0</span></a>
+</header>
+<div class="nav-backdrop" aria-hidden="true"></div>
+
+<main id="main">
+
+<section class="page-hero page-hero-compact">
+  <div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/basket">Basket</a><span>/</span>Checkout</div>
+  <div class="eyebrow">Almost there</div>
+  <h1><span>Checkout</span></h1>
+</section>
+
+<section class="section">
+  <div class="checkout-layout" data-checkout-layout>
+    <form class="checkout-form" name="order-request" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" data-checkout-form novalidate>
+      <input type="hidden" name="form-name" value="order-request">
+      <input type="hidden" name="subject" value="New Rogers Made order request (not paid)">
+      <textarea class="hidden-field" name="order" tabindex="-1" aria-hidden="true"></textarea>
+      <input type="hidden" name="order-reference">
+      <input type="hidden" name="subtotal">
+      <input type="hidden" name="delivery">
+      <input type="hidden" name="total">
+      <input type="hidden" name="payment-status" value="NOT PAID: online payment is not connected yet">
+      <p class="hidden-field"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+      <fieldset class="checkout-block">
+        <legend><span class="checkout-step">01</span>Your details</legend>
+        <div class="form">
+          <div class="field full">
+            <label for="c-name">Full name</label>
+            <input id="c-name" name="name" type="text" autocomplete="name" required>
+            <div class="field-error">Please enter your name.</div>
+          </div>
+          <div class="field">
+            <label for="c-email">Email address</label>
+            <input id="c-email" name="email" type="email" autocomplete="email" required>
+            <div class="field-error">Please enter a valid email address.</div>
+          </div>
+          <div class="field">
+            <label for="c-phone">Phone <span class="optional">(optional)</span></label>
+            <input id="c-phone" name="phone" type="tel" autocomplete="tel">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="checkout-block">
+        <legend><span class="checkout-step">02</span>Delivery address</legend>
+        <div class="form">
+          <div class="field full">
+            <label for="c-address1">Address line 1</label>
+            <input id="c-address1" name="address-line-1" type="text" autocomplete="address-line1" required>
+            <div class="field-error">Please enter the first line of your address.</div>
+          </div>
+          <div class="field full">
+            <label for="c-address2">Address line 2 <span class="optional">(optional)</span></label>
+            <input id="c-address2" name="address-line-2" type="text" autocomplete="address-line2">
+          </div>
+          <div class="field">
+            <label for="c-town">Town or city</label>
+            <input id="c-town" name="town" type="text" autocomplete="address-level2" required>
+            <div class="field-error">Please enter your town or city.</div>
+          </div>
+          <div class="field">
+            <label for="c-county">County <span class="optional">(optional)</span></label>
+            <input id="c-county" name="county" type="text" autocomplete="address-level1">
+          </div>
+          <div class="field">
+            <label for="c-postcode">Postcode</label>
+            <input id="c-postcode" name="postcode" type="text" autocomplete="postal-code" required pattern="\s*[A-Za-z]{1,2}[0-9][A-Za-z0-9]?\s*[0-9][A-Za-z]{2}\s*">
+            <div class="field-error">Please enter a valid UK postcode.</div>
+          </div>
+          <div class="field">
+            <label for="c-country">Country</label>
+            <input id="c-country" name="country" type="text" value="United Kingdom" readonly>
+          </div>
+          <div class="field full">
+            <label for="c-notes">Order notes <span class="optional">(optional)</span></label>
+            <textarea id="c-notes" name="notes" rows="3" placeholder="Anything else I should know, e.g. delivery instructions or a date you need it by"></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="checkout-block">
+        <legend><span class="checkout-step">03</span>Payment</legend>
+        <!-- Card payment (Stripe) will be added here later. -->
+        <div class="payment-placeholder" id="payment-element" data-payment-placeholder>
+          <div class="payment-placeholder-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="1.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>
+            <strong>Secure card payment</strong>
+            <span class="payment-pill">Coming soon</span>
+          </div>
+          <p>Online card payment isn't available yet, so <strong>no payment is taken on this website</strong>.</p>
+          <p>Send your order request below and I'll email you to confirm the details, the personalisation and how to pay. Nothing is made or sent until your order is confirmed and paid.</p>
+        </div>
+      </fieldset>
+
+      <div class="form-status" role="alert" data-form-status></div>
+      <div class="checkout-submit">
+        <button class="button" type="submit">Send order request</button>
+        <p class="form-note">By sending this request you're asking to order these items. It isn't a payment and you won't be charged.</p>
+      </div>
+    </form>
+
+    <aside class="basket-summary checkout-summary" aria-label="Order summary" data-checkout-summary></aside>
+  </div>
+
+  <div data-checkout-empty hidden></div>
+
+  <div class="order-success" data-order-success tabindex="-1" hidden>
+    <span class="tick" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+    <div class="eyebrow">Order request sent</div>
+    <h2>Thank you, <span data-order-name></span>.</h2>
+    <p>Your order request <strong data-order-ref></strong> for <strong data-order-total></strong> has been sent to Rogers Made.</p>
+    <p class="order-not-paid"><strong>This order has not been paid.</strong> No payment has been taken. I'll email you at <strong data-order-email></strong> to confirm the details and arrange payment before anything is made or sent.</p>
+    <a class="button" href="/shop">Back to the shop</a>
+  </div>
+
+  <noscript><p class="section-intro">Please enable JavaScript to check out, or <a href="/#contact">get in touch</a> to order.</p></noscript>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="logo" href="/" aria-label="Rogers Made home"><img src="/assets/images/brand/rogers-made-logo-320.webp" srcset="/assets/images/brand/rogers-made-logo-160.webp 160w, /assets/images/brand/rogers-made-logo-320.webp 320w, /assets/images/brand/rogers-made-logo-480.webp 480w, /assets/images/brand/rogers-made-logo-640.webp 640w" sizes="120px" width="160" height="157" alt="Rogers Made" loading="lazy"></a>
+      <p>Made from wood. Made with purpose. Handmade wooden pieces, designed and made by hand in a UK workshop.</p>
+      <div class="socials" data-socials></div>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="/shop">All pieces</a></li>
+        <li><a href="/shop?category=lamps">Lamps &amp; Lighting</a></li>
+        <li><a href="/shop?category=signs">Personalised Signs</a></li>
+        <li><a href="/shop?category=oak-gifts">Oak Gifts</a></li>
+        <li><a href="/shop?category=bespoke">Bespoke Pieces</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Rogers Made</h4>
+      <ul>
+        <li><a href="/workshop">The Workshop</a></li>
+        <li><a href="/my-story">My Story</a></li>
+        <li><a href="/#commissions">Commissions</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li data-setting-row><span data-setting="email"></span></li>
+        <li data-setting-row><span data-setting="phone"></span></li>
+        <li data-setting-row><span data-setting="location"></span></li>
+        <li><a href="/#contact">Send an enquiry</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div><strong>ROGERS MADE</strong> — Handmade in wood</div>
+    <div>&copy; <span data-year>2026</span> Rogers Made. Made with care, in my workshop.</div>
+  </div>
+</footer>
+
+<script src="/assets/js/settings.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 *Made from wood. Made with purpose.*
 
-A fast, static website for Rogers Made, hosted on Netlify with no build step. Customers browse products and send an enquiry to order. Enquiries arrive through Netlify Forms.
+A fast, static website for Rogers Made, hosted on Netlify with no build step. Customers browse the shop, add pieces to a basket and send an order request from the checkout. Enquiries and order requests arrive through Netlify Forms.
 
 ## Pages
 
@@ -12,13 +12,22 @@ A fast, static website for Rogers Made, hosted on Netlify with no build step. Cu
 | Workshop | `workshop.html` | The four stages of making and the workshop story (photos in `assets/images/workshop/`) |
 | My Story | `my-story.html` | The story behind Rogers Made (photos in `assets/images/story/`) |
 | Shop | `shop.html` | All products, filterable by category (e.g. `/shop?category=lamps`) |
-| Product | `product.html` | One product's page, e.g. `/product?id=oak-house-number-plaque` |
-| Thank you | `thank-you.html` | Shown if the form is sent without JavaScript |
+| Product | `product.html` | One product, e.g. `/product?id=personalised-oak-keyring`: photos, price, delivery, stock, personalisation box, quantity and Add to basket |
+| Basket | `basket.html` | Items, personalisation, quantities, remove, delivery and total |
+| Checkout | `checkout.html` | Customer details, delivery address, order summary and a payment placeholder |
+| Thank you | `thank-you.html` | Shown if the enquiry form is sent without JavaScript |
 | 404 | `404.html` | Page not found |
+
+## Basket, delivery & checkout
+
+- The basket is saved in the customer's browser, so it's still there if they leave and come back.
+- **Delivery:** each product has its own delivery charge. An order pays **one** delivery charge: the highest charge of the items in the basket.
+- **Payment isn't connected yet.** The checkout sends an **order request** (Forms → `order-request` in the Netlify dashboard). It includes the items, personalisation, delivery address and total, and is clearly marked **NOT PAID**. The customer is told that no payment has been taken and that you'll be in touch to arrange payment. Stock numbers don't go down automatically, so update `stock` in `products.js` when something sells.
+- Card payment (e.g. Stripe) can be added later in the Payment section of `checkout.html` (`#payment-element`) and in `initCheckout` in `assets/js/main.js`.
 
 ## Adding or editing products
 
-All products are in **`assets/js/products.js`**. The home page, shop, category counts and product pages update automatically.
+All products are in **`assets/js/products.js`**. The shop, product pages, basket and checkout update automatically.
 
 1. Upload your photos to `assets/images/products/` (see "Product photos" below).
 2. In `products.js`, copy the **TEMPLATE** block at the bottom of the file, paste it into the `ROGERS_PRODUCTS` list and edit it:
@@ -27,32 +36,33 @@ All products are in **`assets/js/products.js`**. The home page, shop, category c
 {
   id: "oak-table-lamp",                 // unique, lowercase, dashes
   name: "Oak Table Lamp",
-  category: "lamps",                    // lamps | signs | oak-gifts | bespoke
-  price: null,                          // null = "Price on request", or a number like 95
-  priceFrom: false,                     // true shows "From £95"
-  summary: "Short text for the card.",
+  category: "lamps",                    // lamps | christmas | signs | oak-gifts | furniture | bespoke
+  price: 65,                            // in pounds
+  delivery: 6.95,                       // UK delivery charge, 0 = free
+  stock: 1,                             // 0 shows "Sold out"
+  personalisation: "",                  // hint text to show a personalisation box, "" for none
+  summary: "One sentence about the piece.",
   description: ["First paragraph.", "Second paragraph."],
-  images: ["/assets/images/products/oak-table-lamp-1.jpg"],
+  features: ["Solid oak", "USB lead"],  // optional bullet list
+  images: ["/assets/images/products/oak-table-lamp-1.jpg"],   // up to 5
   details: [["Timber", "Solid oak"], ["Size", "40cm tall"]],
-  badge: "One of a kind",               // optional, "" for none
-  featured: true,                       // show on the home page (first 6)
-  sold: false                           // true shows a SOLD label
+  badge: "One of a kind"                // optional, "" for none
 },
 ```
 
 - **Remove a product:** delete its whole block, from `{` to `},`.
-- **Set a price:** change `price: null` to a number, e.g. `price: 85`.
-- **Mark as sold:** change `sold: false` to `sold: true`. The product stays on the site with a gold SOLD label, and its button becomes "Ask about a similar piece".
+- **Change a price or delivery charge:** edit `price` or `delivery`.
+- **Sold out:** set `stock: 0`. The product stays listed with a Sold out label.
 
-Every listed product is a genuine Rogers Made piece with its own photos: the Handmade Oak House Number Plaque, the three Christmas lights and the Personalised Oak Keyring. The earlier placeholder "starter slots" have been removed.
+The 11 products were copied from the Rogers Made shop on Numonday (names, descriptions, prices, stock and photos). The delivery charges are starting values. Change them to match your postage costs.
 
-Category names, descriptions and images are at the top of the same file (`ROGERS_CATEGORIES`).
+Category names and descriptions are at the top of the same file (`ROGERS_CATEGORIES`). Categories with no products are hidden from the shop filters.
 
 ## Product photos
 
 - Put photos in `assets/images/products/`.
 - Use simple lowercase file names with dashes and no spaces, e.g. `oak-table-lamp-1.jpg`.
-- List them in the product's `images`, starting with `/assets/images/products/`. The first photo is the main one on the card. Extra photos appear as thumbnails on the product page, where customers can step through them with the arrows (or swipe on mobile) and tap the main photo to view it full screen.
+- List them in the product's `images`, starting with `/assets/images/products/`. Use up to five photos per product. The first photo is the main one on the card. Extra photos appear as thumbnails on the product page, where customers can step through them with the arrows (or swipe on mobile) and tap the main photo to view it full screen.
 - Phone photos are fine. They're resized automatically. Landscape or square photos look best on the cards.
 
 ## Contact details & social links

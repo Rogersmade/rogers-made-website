@@ -17,7 +17,8 @@ PUT YOUR PRODUCT PHOTOS IN THIS FOLDER
      ],
 
    The first photo is the main one on the card. Any extra photos show
-   as thumbnails on the product page.
+   as thumbnails on the product page. Use up to FIVE photos per
+   product (any more are ignored).
 
 Photos straight from your phone are fine. The site automatically resizes
 and compresses them for visitors. Landscape or square photos look best
